@@ -396,10 +396,6 @@ body {
 
 .hero-bg-text {
   font-family: var(--font-hero);
-  font-size: clamp(2.2rem, 7.2vw, 7.4rem);
-  font-weight: 900;
-  line-height: 0.95;
-  letter-spacing: clamp(-2px, -0.05vw, -0.5px);
   text-transform: uppercase;
   background: linear-gradient(180deg, #ffffff 0%, #dedfe8 50%, #7e8096 100%);
   -webkit-background-clip: text;
@@ -407,6 +403,31 @@ body {
   -webkit-text-fill-color: transparent;
   opacity: 0.95;
   filter: drop-shadow(0 15px 35px rgba(0, 0, 0, 0.7));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  line-height: 0.9;
+  user-select: none;
+}
+
+.hero-name-top {
+  display: block;
+  font-size: clamp(1.8rem, 5.2vw, 5.2rem);
+  font-weight: 800;
+  letter-spacing: clamp(3px, 1vw, 12px);
+  opacity: 0.9;
+  line-height: 0.94;
+  margin-bottom: 0.05em;
+  white-space: nowrap;
+}
+
+.hero-name-main {
+  display: block;
+  font-size: clamp(3.2rem, 11vw, 10.8rem);
+  font-weight: 900;
+  letter-spacing: clamp(-2px, -0.05vw, -0.5px);
+  line-height: 0.88;
   white-space: nowrap;
 }
 
@@ -468,7 +489,9 @@ body {
   height: 100%;
   object-fit: contain;
   object-position: bottom center;
-  filter: drop-shadow(0 0 25px rgba(255, 75, 0, 0.85)) drop-shadow(0 15px 30px rgba(0, 0, 0, 0.85));
+  transform: scale(1.085);
+  transform-origin: bottom center;
+  filter: drop-shadow(0 0 24px rgba(255, 75, 0, 0.75)) drop-shadow(0 15px 30px rgba(0, 0, 0, 0.85));
 }
 
 /* Cursor Follower Dot on Portrait */
@@ -504,14 +527,15 @@ body {
 
 .hero-stroke-text {
   font-family: var(--font-hero);
-  font-size: clamp(2.2rem, 7.2vw, 7.4rem);
-  font-weight: 900;
-  line-height: 0.95;
-  letter-spacing: clamp(-2px, -0.05vw, -0.5px);
   text-transform: uppercase;
   color: transparent;
   -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.35);
-  white-space: nowrap;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  line-height: 0.9;
+  user-select: none;
 }
 
 /* Floating Status / Hero Meta Card */
@@ -1884,18 +1908,24 @@ body {
     padding: 0.65rem 1rem;
     font-size: 0.8rem;
   }
-  .hero-bg-text,
-  .hero-stroke-text {
-    font-size: clamp(1.6rem, 6.8vw, 3.2rem);
+  .hero-name-top {
+    font-size: clamp(1.3rem, 5vw, 2.5rem);
+    letter-spacing: clamp(2px, 0.6vw, 5px);
+  }
+  .hero-name-main {
+    font-size: clamp(2.4rem, 9.6vw, 4.8rem);
     letter-spacing: -0.5px;
   }
 }
 
 @media (max-width: 480px) {
-  .hero-bg-text,
-  .hero-stroke-text {
-    font-size: clamp(1.2rem, 6.4vw, 1.85rem);
-    letter-spacing: -0.2px;
+  .hero-name-top {
+    font-size: clamp(0.95rem, 4.6vw, 1.45rem);
+    letter-spacing: 2px;
+  }
+  .hero-name-main {
+    font-size: clamp(1.8rem, 8.4vw, 2.6rem);
+    letter-spacing: -0.3px;
   }
   .hero-stage {
     min-height: 520px;
