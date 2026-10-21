@@ -1,0 +1,19 @@
+{
+  "name": "portfolio-muhammad-febriansyah",
+  "version": "1.0.0",
+  "description": "Portofolio Modern Muhammad Febriansyah - Mahasiswa ITB Ahmad Dahlan",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx -y serve . -l 3000",
+    "dev": "npx -y serve . -l 3000"
+  },
+  "keywords": [
+    "portfolio",
+    "itb-ahmad-dahlan",
+    "3d-hero",
+    "parallax",
+    "glassmorphism"
+  ],
+  "author": "Muhammad Febriansyah",
+  "license": "MIT"
+}

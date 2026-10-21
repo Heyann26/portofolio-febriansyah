@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Muhammad Febriansyah — Portfolio | Mahasiswa Manajemen ITB Ahmad Dahlan</title>
+  <meta name="description" content="Portofolio resmi Muhammad Febriansyah, Mahasiswa S1 Manajemen ITB Ahmad Dahlan Jakarta. Business Strategist, Creative Technologist, dan Content Creator.">
+  <meta name="author" content="Muhammad Febriansyah">
+  
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- CINEMATIC EDITORIAL OPENING SCREEN (CLEAN & NON-AI-SLOP) -->
+  <div class="opening-screen" id="openingScreen">
+    <div class="opening-ambient-glow"></div>
+
+    <div class="opening-container">
+      
+      <!-- Minimalist Tagline -->
+      <div class="opening-badge">
+        <span class="opening-badge-line"></span>
+        <span class="opening-badge-text">PORTFOLIO &mdash; 2026</span>
+        <span class="opening-badge-line"></span>
+      </div>
+
+      <!-- Main Reveal Title (Clean, distinct words, no random dots) -->
+      <div class="opening-title-wrap">
+        <h1 class="opening-title" id="openingTitle">
+          <span class="word-group">
+            <span class="char-span">M</span><span class="char-span">U</span><span class="char-span">H</span><span class="char-span">A</span><span class="char-span">M</span><span class="char-span">M</span><span class="char-span">A</span><span class="char-span">D</span>
+          </span>
+          <span class="word-space">&nbsp;</span>
+          <span class="word-group text-red">
+            <span class="char-span">F</span><span class="char-span">E</span><span class="char-span">B</span><span class="char-span">R</span><span class="char-span">I</span><span class="char-span">A</span><span class="char-span">N</span><span class="char-span">S</span><span class="char-span">Y</span><span class="char-span">A</span><span class="char-span">H</span>
+          </span>
+        </h1>
+        <p class="opening-sub">S1 MANAJEMEN / ITB AHMAD DAHLAN JAKARTA / @Heyann26</p>
+      </div>
+
+      <!-- Minimalist Precision Progress Track -->
+      <div class="opening-progress-box">
+        <div class="opening-progress-track">
+          <div class="opening-progress-bar" id="openingProgressBar"></div>
+        </div>
+        <div class="opening-status">
+          <span class="opening-status-text" id="openingStatusText">MEMUAT SISTEM</span>
+          <span class="opening-counter" id="openingCounter">0%</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Quick Skip Button -->
+    <button class="opening-skip-btn" id="openingSkipBtn" title="Lewati Pembuka">
+      <span>LEWATI</span> <i class="fa-solid fa-arrow-right"></i>
+    </button>
+  </div>
+
+  <!-- Custom Glowing Cursor Follower -->
+  <div class="custom-cursor-dot" id="cursorDot"></div>
+  <div class="custom-cursor-ring" id="cursorRing"></div>
+
+  <!-- Background Canvas for Cinematic Particles -->
+  <canvas id="particles-canvas"></canvas>
+
+  <!-- Background Ambient Glows (Moving across the whole page) -->
+  <div class="ambient-glow glow-top"></div>
+  <div class="ambient-glow glow-hero-center"></div>
+  <div class="ambient-glow glow-about"></div>
+  <div class="ambient-glow glow-projects"></div>
+  <div class="ambient-glow glow-contact"></div>
+
+
+  <!-- Left Floating Social Bar -->
+  <aside class="social-dock" aria-label="Social Media Links">
+    <div class="social-dock-line"></div>
+    <a href="https://www.instagram.com/Heyann26" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Instagram (@Heyann26)" title="Instagram @Heyann26">
+      <i class="fa-brands fa-instagram"></i>
+    </a>
+    <a href="https://www.tiktok.com/@Heyann26" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="TikTok (@Heyann26)" title="TikTok @Heyann26">
+      <i class="fa-brands fa-tiktok"></i>
+    </a>
+    <a href="https://github.com/Heyann26" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="GitHub (@Heyann26)" title="GitHub @Heyann26">
+      <i class="fa-brands fa-github"></i>
+    </a>
+    <a href="https://wa.me/6281234567890" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="WhatsApp" title="WhatsApp">
+      <i class="fa-brands fa-whatsapp"></i>
+    </a>
+    <div class="social-dock-line"></div>
+  </aside>
+
+  <!-- Navigation Bar -->
+  <header class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="#home" class="nav-logo" id="navLogo">
+        <span class="logo-bold">FEBRI</span><span class="logo-red">ANSYAH</span>
+      </a>
+
+      <nav class="nav-menu" id="navMenu">
+        <a href="#home" class="nav-link active">HOME</a>
+        <a href="#about" class="nav-link">ABOUT</a>
+        <a href="#skills" class="nav-link">SKILLS</a>
+        <a href="#projects" class="nav-link">PROJECT</a>
+        <a href="#hobbies" class="nav-link">HOBBIES</a>
+        <a href="#contact" class="nav-link">CONTACT</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="nav-toggle" id="navToggle" aria-label="Buka Menu">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer Menu -->
+  <div class="mobile-drawer" id="mobileDrawer">
+    <div class="drawer-header">
+      <div class="nav-logo">
+        <span class="logo-bold">FEBRI</span><span class="logo-red">ANSYAH</span>
+      </div>
+      <button class="drawer-close" id="drawerClose" aria-label="Tutup Menu">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <div class="drawer-links">
+      <a href="#home" class="drawer-link">HOME</a>
+      <a href="#about" class="drawer-link">ABOUT</a>
+      <a href="#skills" class="drawer-link">SKILLS</a>
+      <a href="#projects" class="drawer-link">PROJECT</a>
+      <a href="#hobbies" class="drawer-link">HOBBIES</a>
+      <a href="#contact" class="drawer-link">CONTACT</a>
+    </div>
+    <div class="drawer-footer">
+      <a href="#contact" class="btn-primary-glow w-full">HUBUNGI SAYA</a>
+    </div>
+  </div>
+
+  <main>
+    <!-- HERO SECTION (3D DEPTH CUTOUT EFFECT) -->
+    <section class="hero-section" id="home">
+      <div class="hero-stage" id="heroStage">
+        
+        <!-- Background Radial Spotlight -->
+        <div class="hero-spotlight"></div>
+
+        <!-- Layer 1: Giant Background Text (Behind Subject) -->
+        <div class="hero-bg-text-wrap" id="heroBgTextWrap">
+          <h1 class="hero-bg-text" id="heroBgText">FEBRIANSYAH</h1>
+        </div>
+
+        <!-- Layer 2: Subject Cutout Image -->
+        <div class="hero-portrait-wrap" id="heroPortraitWrap">
+          <img 
+            id="heroPortraitImg" 
+            src="assets/images/febri_portrait.png" 
+            alt="Muhammad Febriansyah" 
+            class="hero-portrait-img"
+          >
+          <div class="hero-portrait-fade"></div>
+        </div>
+
+        <!-- Layer 3: Foreground Text Stroke (Depth Wrap Effect) -->
+        <div class="hero-stroke-text-wrap" id="heroStrokeTextWrap" aria-hidden="true">
+          <div class="hero-stroke-text" id="heroStrokeText">FEBRIANSYAH</div>
+        </div>
+
+        <!-- Floating Status / Info Card -->
+        <div class="hero-meta-badge" id="heroBadge">
+          <div class="status-indicator">
+            <span class="status-dot"></span>
+            <span class="status-text">Available for Collaboration</span>
+          </div>
+          <p class="hero-subtitle">
+            <strong>Muhammad Febriansyah</strong> • <span id="heroTypingRole" class="hero-typing-role">Mahasiswa S1 Manajemen ITB-AD</span><span class="typing-caret">|</span>
+          </p>
+        </div>
+
+      </div>
+
+      <!-- Scroll Down Cue -->
+      <a href="#about" class="hero-scroll-cue" aria-label="Scroll ke Bawah">
+        <span>SCROLL DOWN</span>
+        <i class="fa-solid fa-arrow-down-long"></i>
+      </a>
+
+      <!-- Signature Rounded Sheet Transition -->
+      <div class="hero-curved-sheet">
+        <div class="sheet-notch">
+          <div class="sheet-avatar-btn" id="sheetAvatarTrigger" title="Lihat Profil">
+            <span class="avatar-letter">F</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- INFINITE MARQUEE TICKER BANNER (ANIMASI HIDUP & KEREN) -->
+    <div class="marquee-ticker" aria-label="Keahlian & Bidang Fokus">
+      <div class="marquee-track">
+        <div class="marquee-content">
+          <span class="ticker-item"><i class="fa-solid fa-boxes-stacked text-red"></i> STOCKLY INVENTORY CONTROL</span>
+          <span class="ticker-item"><i class="fa-solid fa-chart-pie text-red"></i> STRATEGIC BUSINESS MANAGEMENT</span>
+          <span class="ticker-item"><i class="fa-solid fa-truck-fast text-red"></i> SUPPLY CHAIN &amp; DISTRIBUTION</span>
+          <span class="ticker-item"><i class="fa-solid fa-chart-line text-red"></i> CASHFLOW &amp; FINANCIAL ANALYTICS</span>
+          <span class="ticker-item"><i class="fa-solid fa-bullhorn text-red"></i> OMNICHANNEL DIGITAL MARKETING</span>
+          <span class="ticker-item"><i class="fa-solid fa-code text-red"></i> MODERN WEB APPS</span>
+          <span class="ticker-item"><i class="fa-solid fa-palette text-red"></i> UI/UX INTERACTIVE DESIGN</span>
+          <span class="ticker-item"><i class="fa-solid fa-graduation-cap text-red"></i> S1 MANAJEMEN ITB AHMAD DAHLAN</span>
+          <span class="ticker-item"><i class="fa-brands fa-tiktok text-red"></i> @Heyann26</span>
+        </div>
+        <div class="marquee-content" aria-hidden="true">
+          <span class="ticker-item"><i class="fa-solid fa-boxes-stacked text-red"></i> STOCKLY INVENTORY CONTROL</span>
+          <span class="ticker-item"><i class="fa-solid fa-chart-pie text-red"></i> STRATEGIC BUSINESS MANAGEMENT</span>
+          <span class="ticker-item"><i class="fa-solid fa-truck-fast text-red"></i> SUPPLY CHAIN &amp; DISTRIBUTION</span>
+          <span class="ticker-item"><i class="fa-solid fa-chart-line text-red"></i> CASHFLOW &amp; FINANCIAL ANALYTICS</span>
+          <span class="ticker-item"><i class="fa-solid fa-bullhorn text-red"></i> OMNICHANNEL DIGITAL MARKETING</span>
+          <span class="ticker-item"><i class="fa-solid fa-code text-red"></i> MODERN WEB APPS</span>
+          <span class="ticker-item"><i class="fa-solid fa-palette text-red"></i> UI/UX INTERACTIVE DESIGN</span>
+          <span class="ticker-item"><i class="fa-solid fa-graduation-cap text-red"></i> S1 MANAJEMEN ITB AHMAD DAHLAN</span>
+          <span class="ticker-item"><i class="fa-brands fa-tiktok text-red"></i> @Heyann26</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTENT WRAPPER WITH CURVED CONTAINER -->
+    <div class="content-wrapper">
+
+      <!-- ABOUT SECTION -->
+      <section class="section about-section" id="about">
+        <div class="section-container">
+          
+          <div class="section-header">
+            <span class="section-badge"><i class="fa-solid fa-user"></i> TENTANG SAYA</span>
+            <h2 class="section-title">Dedikasi & Passion di Dunia Digital</h2>
+            <p class="section-desc">Mengenal lebih dekat perjalanan saya sebagai mahasiswa dan pengembang web di ITB Ahmad Dahlan.</p>
+          </div>
+
+          <div class="about-grid">
+            <!-- Left Bio Card -->
+            <div class="glass-card bio-card">
+              <div class="card-glow-badge">PROFILE OVERVIEW</div>
+              <h3 class="bio-name">Muhammad Febriansyah</h3>
+              <p class="bio-role">
+                <i class="fa-solid fa-graduation-cap"></i> Mahasiswa <strong>S1 Manajemen — ITB Ahmad Dahlan Jakarta</strong>
+              </p>
+              <div class="bio-text">
+                <p>
+                  Halo! Saya Muhammad Febriansyah (<strong>@Heyann26</strong>), mahasiswa aktif Program Studi <strong>S1 Manajemen di Institut Teknologi dan Bisnis Ahmad Dahlan Jakarta (ITB-AD)</strong>.
+                </p>
+                <p>
+                  Saya memiliki ketertarikan tinggi pada perpaduan antara strategi manajemen bisnis, kepemimpinan adaptif, dan teknologi digital modern. Gemar mengeksplorasi bagaimana kreativitas visual dan solusi berbasis web dapat mengoptimalkan proses bisnis serta memberikan dampak positif yang nyata.
+                </p>
+              </div>
+
+              <!-- Quick Info Badges -->
+              <div class="info-badges">
+                <div class="badge-item">
+                  <i class="fa-solid fa-graduation-cap"></i>
+                  <div>
+                    <small>Program Studi</small>
+                    <span>S1 Manajemen</span>
+                  </div>
+                </div>
+                <div class="badge-item">
+                  <i class="fa-solid fa-building-columns"></i>
+                  <div>
+                    <small>Kampus</small>
+                    <span>ITB Ahmad Dahlan</span>
+                  </div>
+                </div>
+                <div class="badge-item">
+                  <i class="fa-solid fa-location-dot"></i>
+                  <div>
+                    <small>Lokasi</small>
+                    <span>Jakarta, Indonesia</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bio-cta-group">
+                <a href="#contact" class="btn-primary-glow">
+                  <i class="fa-regular fa-paper-plane"></i> Hubungi Saya
+                </a>
+                <a href="#projects" class="btn-secondary-glass">
+                  <i class="fa-solid fa-eye"></i> Lihat Karya
+                </a>
+              </div>
+            </div>
+
+            <!-- Right: Campus & Highlights -->
+            <div class="about-side-stack">
+              <!-- ITB Ahmad Dahlan Highlight Card -->
+              <div class="glass-card campus-card">
+                <div class="campus-icon-box">
+                  <i class="fa-solid fa-chart-line"></i>
+                </div>
+                <div class="campus-info">
+                  <span class="campus-tag">PROGRAM STUDI AKTIF</span>
+                  <h4>S1 Manajemen — ITB Ahmad Dahlan</h4>
+                  <p>Mendalami manajemen strategis, tata kelola bisnis, digital marketing, manajemen operasional, dan kepemimpinan adaptif di era transformasi digital.</p>
+                </div>
+              </div>
+
+              <!-- Metrics Stats Grid -->
+              <div class="stats-grid">
+                <div class="glass-card stat-card">
+                  <span class="stat-number" data-target="15">0</span><span class="stat-plus">+</span>
+                  <p class="stat-label">Proyek & Eksperimen</p>
+                </div>
+                <div class="glass-card stat-card">
+                  <span class="stat-number" data-target="100">0</span><span class="stat-plus">%</span>
+                  <p class="stat-label">Komitmen & Antusiasme</p>
+                </div>
+                <div class="glass-card stat-card">
+                  <span class="stat-number" data-target="5">0</span><span class="stat-plus">+</span>
+                  <p class="stat-label">Bidang Minat & Skill</p>
+                </div>
+                <div class="glass-card stat-card">
+                  <span class="stat-number" data-target="24">0</span><span class="stat-plus">/7</span>
+                  <p class="stat-label">Semangat Belajar</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      <!-- SKILLS SECTION -->
+      <section class="section skills-section" id="skills">
+        <div class="section-container">
+          
+          <div class="section-header">
+            <span class="section-badge"><i class="fa-solid fa-code"></i> KEMAMPUAN TEKNIS</span>
+            <h2 class="section-title">Teknologi & Tools yang Dikuasai</h2>
+            <p class="section-desc">Peralatan dan fondasi yang saya gunakan dalam mewujudkan ide menjadi produk digital interaktif.</p>
+          </div>
+
+          <div class="skills-grid">
+            
+            <div class="glass-card skill-card">
+              <div class="skill-icon-header">
+                <div class="icon-wrap red"><i class="fa-brands fa-html5"></i></div>
+                <span class="skill-level">Advanced</span>
+              </div>
+              <h4 class="skill-name">HTML5 & Semantic Web</h4>
+              <p class="skill-desc">Struktur markup modern yang rapi, aksesibel (a11y), dan ramah SEO untuk performa optimal.</p>
+              <div class="skill-bar"><div class="skill-fill" style="width: 95%;"></div></div>
+            </div>
+
+            <div class="glass-card skill-card">
+              <div class="skill-icon-header">
+                <div class="icon-wrap blue"><i class="fa-brands fa-css3-alt"></i></div>
+                <span class="skill-level">Advanced</span>
+              </div>
+              <h4 class="skill-name">CSS3, Flexbox & Grid</h4>
+              <p class="skill-desc">Styling modern, glassmorphism, responsive design di semua resolusi, dan transisi fluid.</p>
+              <div class="skill-bar"><div class="skill-fill" style="width: 90%;"></div></div>
+            </div>
+
+            <div class="glass-card skill-card">
+              <div class="skill-icon-header">
+                <div class="icon-wrap yellow"><i class="fa-brands fa-js"></i></div>
+                <span class="skill-level">Proficient</span>
+              </div>
+              <h4 class="skill-name">Modern JavaScript (ES6+)</h4>
+              <p class="skill-desc">Manipulasi DOM dinamis, asynchronous programming (Async/Await), dan interaktivitas tingkat lanjut.</p>
+              <div class="skill-bar"><div class="skill-fill" style="width: 85%;"></div></div>
+            </div>
+
+            <div class="glass-card skill-card">
+              <div class="skill-icon-header">
+                <div class="icon-wrap cyan"><i class="fa-brands fa-react"></i></div>
+                <span class="skill-level">Intermediate</span>
+              </div>
+              <h4 class="skill-name">React & Component Architecture</h4>
+              <p class="skill-desc">Pengembangan antarmuka berbasis komponen modular, reusable state, dan routing modern.</p>
+              <div class="skill-bar"><div class="skill-fill" style="width: 80%;"></div></div>
+            </div>
+
+            <div class="glass-card skill-card">
+              <div class="skill-icon-header">
+                <div class="icon-wrap purple"><i class="fa-brands fa-figma"></i></div>
+                <span class="skill-level">Proficient</span>
+              </div>
+              <h4 class="skill-name">UI/UX Design (Figma)</h4>
+              <p class="skill-desc">Perancangan wireframing, high-fidelity mockup, visual hierarchy, dan prototyping interaktif.</p>
+              <div class="skill-bar"><div class="skill-fill" style="width: 85%;"></div></div>
+            </div>
+
+            <div class="glass-card skill-card">
+              <div class="skill-icon-header">
+                <div class="icon-wrap orange"><i class="fa-brands fa-git-alt"></i></div>
+                <span class="skill-level">Proficient</span>
+              </div>
+              <h4 class="skill-name">Git & Version Control</h4>
+              <p class="skill-desc">Manajemen source code, branching, repository kolaborasi GitHub, dan alur kerja terstruktur.</p>
+              <div class="skill-bar"><div class="skill-fill" style="width: 85%;"></div></div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      <!-- PROJECTS SECTION -->
+      <section class="section projects-section" id="projects">
+        <div class="section-container">
+          
+          <div class="section-header">
+            <span class="section-badge"><i class="fa-solid fa-briefcase"></i> SHOWCASE KARYA</span>
+            <h2 class="section-title">Proyek & Eksplorasi Pilihan</h2>
+            <p class="section-desc">Koleksi beberapa karya dan purwarupa yang memadukan desain visual sinematik dengan fungsionalitas web.</p>
+          </div>
+
+          <div class="projects-grid">
+            
+            <!-- Project 1: Stockly. INVENTORY (Real Application) -->
+            <article class="glass-card project-card tilt-card" data-category="management" data-tilt>
+              <div class="card-glare"></div>
+              <div class="project-img-box">
+                <img src="assets/images/stockly_inventory.png" alt="Stockly Inventory Dashboard Real Screenshot" loading="lazy">
+                <div class="project-overlay">
+                  <a href="https://www.stocklyinventory.web.id" target="_blank" rel="noopener noreferrer" class="btn-preview-modal" style="text-decoration: none;">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i> Buka Website Langsung
+                  </a>
+                  <button class="btn-preview-modal" onclick="openProjectModal('stockly-inventory')" style="background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.25);">
+                    <i class="fa-solid fa-magnifying-glass-plus"></i> Detail Fitur
+                  </button>
+                </div>
+                <div class="project-status-badge">
+                  <span class="status-pulse-dot"></span> Live Web Production
+                </div>
+              </div>
+              <div class="project-info">
+                <div class="project-tags">
+                  <span class="tag tag-accent">Live Web Production</span>
+                  <span class="tag">Sistem Manajemen</span>
+                  <span class="tag">Supply Chain</span>
+                  <span class="tag">Warehouse Ops</span>
+                </div>
+                <h3 class="project-title">
+                  <a href="https://www.stocklyinventory.web.id" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">
+                    Stockly. INVENTORY — Sistem Manajemen Stok &amp; Distribusi <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.85em; color: var(--accent-red); margin-left: 4px;"></i>
+                  </a>
+                </h3>
+                <p class="project-summary">Dashboard tata kelola inventaris gudang dan supply chain terintegrasi: pemantauan stok fisik, otomatisasi alur distribusi penjualan (kemas &amp; kirim), stock opname berkala, dan log audit mutasi barang secara real-time.</p>
+                
+                <!-- Quick Metric Highlights -->
+                <div class="project-mini-metrics">
+                  <div class="mini-metric">
+                    <small>Akses Web Langsung</small>
+                    <strong style="color: var(--accent-red-bright);">stocklyinventory.web.id</strong>
+                  </div>
+                  <div class="mini-metric">
+                    <small>Status Sistem</small>
+                    <strong style="color: #10b981;">Online &bull; Aktif</strong>
+                  </div>
+                </div>
+
+                <div class="project-links">
+                  <a href="https://www.stocklyinventory.web.id" target="_blank" rel="noopener noreferrer" class="btn-primary-glow" style="padding: 0.55rem 1.15rem; font-size: 0.82rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem;">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i> Kunjungi Web
+                  </a>
+                  <button class="btn-text-link" onclick="openProjectModal('stockly-inventory')">
+                    Detail Sistem <i class="fa-solid fa-arrow-right"></i>
+                  </button>
+                  <a href="https://www.stocklyinventory.web.id" target="_blank" rel="noopener noreferrer" class="icon-link" title="Buka https://www.stocklyinventory.web.id"><i class="fa-solid fa-globe"></i></a>
+                </div>
+              </div>
+            </article>
+
+            <!-- Project 2: FinTrack Pro (Financial & Cashflow Analytics) -->
+            <article class="glass-card project-card tilt-card" data-category="finance" data-tilt>
+              <div class="card-glare"></div>
+              <div class="project-img-box">
+                <img src="assets/images/fintrack_dashboard.svg" alt="FinTrack Business Cashflow & P&L Intelligence" loading="lazy">
+                <div class="project-overlay">
+                  <button class="btn-preview-modal" onclick="openProjectModal('fintrack-finance')">
+                    <i class="fa-solid fa-magnifying-glass-plus"></i> Detail &amp; Analisis
+                  </button>
+                </div>
+                <div class="project-status-badge badge-blue">
+                  <span class="status-pulse-dot blue"></span> Financial Intelligence
+                </div>
+              </div>
+              <div class="project-info">
+                <div class="project-tags">
+                  <span class="tag tag-accent">Manajemen Keuangan</span>
+                  <span class="tag">Cashflow P&amp;L</span>
+                  <span class="tag">Forecasting</span>
+                  <span class="tag">Cost Efficiency</span>
+                </div>
+                <h3 class="project-title">FinTrack Pro — Business Cashflow &amp; P&amp;L Intelligence</h3>
+                <p class="project-summary">Dashboard analisis finansial strategis untuk memantau tren pendapatan gross, margin laba bersih, efisiensi beban operasional (OPEX), serta simulasi proyeksi arus kas bisnis 2026/2027.</p>
+                
+                <!-- Quick Metric Highlights -->
+                <div class="project-mini-metrics">
+                  <div class="mini-metric">
+                    <small>Margin Laba</small>
+                    <strong class="text-green">+28.6% Net Margin</strong>
+                  </div>
+                  <div class="mini-metric">
+                    <small>Fokus Strategis</small>
+                    <strong>Efisiensi OPEX</strong>
+                  </div>
+                </div>
+
+                <div class="project-links">
+                  <button class="btn-text-link" onclick="openProjectModal('fintrack-finance')">
+                    Pelajari Sistem <i class="fa-solid fa-arrow-right"></i>
+                  </button>
+                  <a href="javascript:void(0)" onclick="openProjectModal('fintrack-finance')" class="icon-link" title="Detail Arsitektur"><i class="fa-solid fa-layer-group"></i></a>
+                  <a href="javascript:void(0)" onclick="openProjectModal('fintrack-finance')" class="icon-link" title="Pratinjau Layar Penuh"><i class="fa-solid fa-expand"></i></a>
+                </div>
+              </div>
+            </article>
+
+            <!-- Project 3: MarketPulse (Omnichannel Marketing & Consumer Analytics) -->
+            <article class="glass-card project-card tilt-card" data-category="marketing" data-tilt>
+              <div class="card-glare"></div>
+              <div class="project-img-box">
+                <img src="assets/images/marketpulse_dashboard.svg" alt="MarketPulse Omnichannel Marketing Dashboard" loading="lazy">
+                <div class="project-overlay">
+                  <button class="btn-preview-modal" onclick="openProjectModal('marketpulse-analytics')">
+                    <i class="fa-solid fa-magnifying-glass-plus"></i> Detail &amp; Metrik
+                  </button>
+                </div>
+                <div class="project-status-badge badge-purple">
+                  <span class="status-pulse-dot purple"></span> Omnichannel Live
+                </div>
+              </div>
+              <div class="project-info">
+                <div class="project-tags">
+                  <span class="tag tag-accent">Digital Marketing</span>
+                  <span class="tag">TikTok &amp; IG Ads</span>
+                  <span class="tag">Perilaku Konsumen</span>
+                  <span class="tag">Gen Z Demographics</span>
+                </div>
+                <h3 class="project-title">MarketPulse — Omnichannel Marketing &amp; Sales Analytics</h3>
+                <p class="project-summary">Platform analitik konversi penjualan omnichannel yang mengintegrasikan TikTok Shopping (@Heyann26), Instagram Feeds, dan Marketplace dengan visualisasi demografi konsumen Gen Z &amp; Millennial.</p>
+                
+                <!-- Quick Metric Highlights -->
+                <div class="project-mini-metrics">
+                  <div class="mini-metric">
+                    <small>ROAS Efektif</small>
+                    <strong class="text-green">5.82x Return</strong>
+                  </div>
+                  <div class="mini-metric">
+                    <small>NPS Score</small>
+                    <strong class="text-accent">+72 (Excellent)</strong>
+                  </div>
+                </div>
+
+                <div class="project-links">
+                  <button class="btn-text-link" onclick="openProjectModal('marketpulse-analytics')">
+                    Pelajari Sistem <i class="fa-solid fa-arrow-right"></i>
+                  </button>
+                  <a href="javascript:void(0)" onclick="openProjectModal('marketpulse-analytics')" class="icon-link" title="Detail Arsitektur"><i class="fa-solid fa-layer-group"></i></a>
+                  <a href="javascript:void(0)" onclick="openProjectModal('marketpulse-analytics')" class="icon-link" title="Pratinjau Layar Penuh"><i class="fa-solid fa-expand"></i></a>
+                </div>
+              </div>
+            </article>
+
+          </div>
+
+        </div>
+      </section>
+
+      <!-- HOBBIES & INTERESTS SECTION -->
+      <section class="section hobbies-section" id="hobbies">
+        <div class="section-container">
+          
+          <div class="section-header">
+            <span class="section-badge"><i class="fa-solid fa-heart"></i> MINAT & HOBI</span>
+            <h2 class="section-title">Eksplorasi di Luar Jam Kuliah</h2>
+            <p class="section-desc">Aktivitas dan ketertarikan yang membentuk kreativitas, fokus, dan perspektif saya dalam memecahkan masalah.</p>
+          </div>
+
+          <div class="hobbies-grid">
+            
+            <div class="glass-card hobby-card">
+              <div class="hobby-icon red"><i class="fa-solid fa-laptop-code"></i></div>
+              <h3>Creative Web Coding</h3>
+              <p>Bereksperimen dengan animasi CSS, dynamic particle effects, dan tipografi 3D untuk menciptakan antarmuka yang memukau pengguna.</p>
+              <div class="hobby-tag">#Coding</div>
+            </div>
+
+            <div class="glass-card hobby-card">
+              <div class="hobby-icon purple"><i class="fa-solid fa-compass-drafting"></i></div>
+              <h3>UI/UX & Visual Aesthetic</h3>
+              <p>Mengeksplorasi tren desain modern di Dribbble/Behance, membedah komposisi warna, visual rhythm, dan interaksi mikro yang memikat.</p>
+              <div class="hobby-tag">#Design</div>
+            </div>
+
+            <div class="glass-card hobby-card">
+              <div class="hobby-icon blue"><i class="fa-solid fa-gamepad"></i></div>
+              <h3>Gaming & Problem Solving</h3>
+              <p>Bermain game strategi dan open-world untuk mengasah refleks, berpikir taktis, pemecahan teka-teki, dan kerja sama tim.</p>
+              <div class="hobby-tag">#Gaming</div>
+            </div>
+
+            <div class="glass-card hobby-card">
+              <div class="hobby-icon orange"><i class="fa-solid fa-camera"></i></div>
+              <h3>Fotografi & Sinematografi</h3>
+              <p>Menangkap momen perkotaan, sudut pandang dramatis, pencahayaan moody, dan komposisi simetris yang memperkaya rasa visual.</p>
+              <div class="hobby-tag">#Photography</div>
+            </div>
+
+            <div class="glass-card hobby-card">
+              <div class="hobby-icon green"><i class="fa-solid fa-mug-hot"></i></div>
+              <h3>Coffee & Deep Work</h3>
+              <p>Menikmati seduhan kopi sambil mendengarkan musik lo-fi, membaca perkembangan teknologi AI, dan merencanakan ide-ide baru.</p>
+              <div class="hobby-tag">#Lifestyle</div>
+            </div>
+
+            <div class="glass-card hobby-card">
+              <div class="hobby-icon cyan"><i class="fa-solid fa-graduation-cap"></i></div>
+              <h3>Campus & Tech Community</h3>
+              <p>Aktif berdiskusi tentang tren pemrograman, sharing pengetahuan dengan rekan kampus ITB Ahmad Dahlan, dan memperluas relasi.</p>
+              <div class="hobby-tag">#Community</div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      <!-- CONTACT SECTION -->
+      <section class="section contact-section" id="contact">
+        <div class="section-container">
+          
+          <div class="section-header">
+            <span class="section-badge"><i class="fa-solid fa-envelope"></i> HUBUNGI SAYA</span>
+            <h2 class="section-title">Mari Terhubung & Berkolaborasi</h2>
+            <p class="section-desc">Punya pertanyaan, tawaran kolaborasi proyek, atau sekadar ingin berdiskusi? Jangan ragu mengirimkan pesan!</p>
+          </div>
+
+          <div class="contact-grid">
+            
+            <!-- Contact Direct Channels -->
+            <div class="glass-card contact-info-card">
+              <div class="contact-info-header">
+                <h3>Informasi Kontak</h3>
+                <p>Silakan hubungi saya melalui saluran berikut untuk respon cepat:</p>
+              </div>
+
+              <div class="contact-channels">
+                <a href="https://wa.me/6281234567890" target="_blank" rel="noopener noreferrer" class="channel-item">
+                  <div class="channel-icon green"><i class="fa-brands fa-whatsapp"></i></div>
+                  <div class="channel-text">
+                    <small>WhatsApp Langsung</small>
+                    <span>+62 812-3456-7890</span>
+                  </div>
+                  <i class="fa-solid fa-arrow-up-right-from-square channel-ext"></i>
+                </a>
+
+                <div class="channel-item" onclick="copyEmail('m.febriansyah@example.com')">
+                  <div class="channel-icon red"><i class="fa-regular fa-envelope"></i></div>
+                  <div class="channel-text">
+                    <small>Email Resmi (Klik untuk Salin)</small>
+                    <span id="emailText">m.febriansyah@example.com</span>
+                  </div>
+                  <i class="fa-regular fa-copy channel-ext" title="Salin Email"></i>
+                </div>
+
+                <div class="channel-item">
+                  <div class="channel-icon blue"><i class="fa-solid fa-building-columns"></i></div>
+                  <div class="channel-text">
+                    <small>Kampus / Asal</small>
+                    <span>ITB Ahmad Dahlan Jakarta</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Social Links in Card -->
+              <div class="contact-social-bar">
+                <span>Sosial media (@Heyann26):</span>
+                <div class="card-social-links">
+                  <a href="https://www.instagram.com/Heyann26" target="_blank" rel="noopener" title="Instagram @Heyann26"><i class="fa-brands fa-instagram"></i></a>
+                  <a href="https://www.tiktok.com/@Heyann26" target="_blank" rel="noopener" title="TikTok @Heyann26"><i class="fa-brands fa-tiktok"></i></a>
+                  <a href="https://github.com/Heyann26" target="_blank" rel="noopener" title="GitHub @Heyann26"><i class="fa-brands fa-github"></i></a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Contact Form -->
+            <div class="glass-card contact-form-card">
+              <h3>Kirim Pesan Cepat</h3>
+              <form id="contactForm" onsubmit="handleContactSubmit(event)">
+                <div class="form-group">
+                  <label for="senderName">Nama Lengkap</label>
+                  <input type="text" id="senderName" required placeholder="Contoh: Rian Pratama">
+                </div>
+                <div class="form-group">
+                  <label for="senderEmail">Email Anda</label>
+                  <input type="email" id="senderEmail" required placeholder="nama@email.com">
+                </div>
+                <div class="form-group">
+                  <label for="senderSubject">Subjek / Topik</label>
+                  <input type="text" id="senderSubject" required placeholder="Kolaborasi Proyek / Pertanyaan">
+                </div>
+                <div class="form-group">
+                  <label for="senderMessage">Pesan</label>
+                  <textarea id="senderMessage" rows="4" required placeholder="Tuliskan pesan atau detail kebutuhan Anda..."></textarea>
+                </div>
+                <button type="submit" class="btn-primary-glow w-full" id="btnSubmitForm">
+                  <i class="fa-solid fa-paper-plane"></i> Kirim Pesan via WhatsApp
+                </button>
+              </form>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-left">
+        <div class="footer-logo">
+          <span class="logo-bold">FEBRI</span><span class="logo-red">ANSYAH</span>
+        </div>
+        <p class="footer-text">© 2026 Muhammad Febriansyah — Mahasiswa ITB Ahmad Dahlan. Dibuat dengan passion & estetika modern.</p>
+      </div>
+      <div class="footer-right">
+        <a href="#home" class="btn-back-to-top" aria-label="Kembali ke atas">
+          <i class="fa-solid fa-arrow-up"></i>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+
+
+  <!-- PROJECT DETAILS MODAL -->
+  <div class="modal-overlay" id="projectModal" aria-hidden="true">
+    <div class="modal-box glass-card project-modal-box">
+      <div class="modal-header">
+        <h3 id="modalProjectTitle">Judul Proyek</h3>
+        <button class="modal-close" onclick="closeProjectModal()" aria-label="Tutup Modal">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="modal-body" id="modalProjectBody">
+        <!-- Injected via script.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- JavaScript -->
+  <script src="script.js"></script>
+</body>
+</html>
