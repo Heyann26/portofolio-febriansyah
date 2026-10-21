@@ -489,8 +489,6 @@ body {
   height: 100%;
   object-fit: contain;
   object-position: bottom center;
-  transform: scale(1.085);
-  transform-origin: bottom center;
   filter: drop-shadow(0 0 24px rgba(255, 75, 0, 0.75)) drop-shadow(0 15px 30px rgba(0, 0, 0, 0.85));
 }
 
