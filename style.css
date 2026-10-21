@@ -444,23 +444,6 @@ body {
   display: none !important;
 }
 
-/* Idle Hint Layer (Spider-Man / Luffy Alter Ego Periodic Flash) */
-.hero-luffy-hint {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  pointer-events: none;
-  z-index: 2;
-  opacity: 0;
-  will-change: opacity;
-  transition: opacity 0.35s ease;
-}
-
 /* Cursor Reveal Layer (Masked by spring-damped circle at mouse position) */
 .hero-luffy-overlay {
   position: absolute;
@@ -474,23 +457,23 @@ body {
   pointer-events: none;
   z-index: 3;
   opacity: var(--luffy-opacity, 0);
-  mask-image: radial-gradient(circle var(--reveal-radius, 130px) at var(--cursor-x, -1000px) var(--cursor-y, -1000px), black 60%, transparent 100%);
-  -webkit-mask-image: radial-gradient(circle var(--reveal-radius, 130px) at var(--cursor-x, -1000px) var(--cursor-y, -1000px), black 60%, transparent 100%);
+  mask-image: radial-gradient(circle var(--reveal-radius, 140px) at var(--cursor-x, -1000px) var(--cursor-y, -1000px), black 60%, transparent 100%);
+  -webkit-mask-image: radial-gradient(circle var(--reveal-radius, 140px) at var(--cursor-x, -1000px) var(--cursor-y, -1000px), black 60%, transparent 100%);
   mask-repeat: no-repeat;
   -webkit-mask-repeat: no-repeat;
-  transition: opacity 0.25s ease;
+  transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: mask-image, -webkit-mask-image, opacity;
 }
 
 .luffy-cutout-img {
-  filter: drop-shadow(0 0 32px rgba(255, 75, 0, 0.85)) drop-shadow(0 20px 40px rgba(0, 0, 0, 0.95));
+  filter: drop-shadow(0 0 24px rgba(255, 75, 0, 0.75)) drop-shadow(0 15px 30px rgba(0, 0, 0, 0.85));
 }
 
 /* Cursor Follower Dot on Portrait */
 .hero-cursor-follower-dot {
   position: absolute;
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
   left: var(--cursor-x, -1000px);
   top: var(--cursor-y, -1000px);
   transform: translate(-50%, -50%);
@@ -498,52 +481,9 @@ body {
   pointer-events: none;
   z-index: 25;
   background: #ffffff;
-  box-shadow: 0 0 14px rgba(255, 85, 0, 0.9), 0 0 25px rgba(255, 45, 85, 0.8);
+  box-shadow: 0 0 16px rgba(255, 85, 0, 0.95), 0 0 28px rgba(255, 45, 85, 0.85);
   opacity: var(--luffy-opacity, 0);
   transition: opacity 0.2s ease;
-}
-
-/* Dual Persona Interactive Badge */
-.dual-persona-badge {
-  position: absolute;
-  bottom: 1.8rem;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 10;
-  background: rgba(14, 12, 18, 0.92);
-  border: 1px solid rgba(255, 75, 20, 0.55);
-  backdrop-filter: blur(14px);
-  border-radius: 50px;
-  padding: 0.5rem 1.25rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.75), 0 0 24px rgba(255, 45, 85, 0.3);
-  user-select: none;
-  pointer-events: auto;
-  font-size: 0.82rem;
-  color: var(--text-primary);
-  white-space: nowrap;
-  animation: badgeFloating 3s infinite alternate ease-in-out;
-}
-
-@keyframes badgeFloating {
-  0% { transform: translateX(-50%) translateY(0); }
-  100% { transform: translateX(-50%) translateY(-5px); }
-}
-
-.dual-persona-badge strong {
-  color: #ff5500;
-  text-shadow: 0 0 10px rgba(255, 85, 0, 0.75);
-}
-
-.flame-icon-bounce {
-  animation: flameIconBounce 1.2s infinite alternate ease-in-out;
-}
-
-@keyframes flameIconBounce {
-  0% { transform: scale(0.9) rotate(-6deg); }
-  100% { transform: scale(1.2) rotate(6deg); filter: drop-shadow(0 0 8px #ff4500); }
 }
 
 /* Layer 3: Foreground Text Stroke (Depth Wrap Effect) */
@@ -2205,52 +2145,116 @@ body {
   filter: blur(14px);
 }
 
-/* 1. Fullscreen WebGL Lightning Canvas */
-.opening-lightning-canvas {
+/* 1. Ambient Deep Glows in Opening */
+.opening-ambient-glow {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 2;
+  border-radius: 50%;
+  filter: blur(120px);
   pointer-events: none;
+  opacity: 0.35;
 }
 
-/* 2. Fullscreen Animated Luffy Background Blend */
-.opening-luffy-fullscreen-wrap {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  pointer-events: none;
-  z-index: 1;
-  opacity: 0.45;
-  mix-blend-mode: screen;
+.opening-glow-1 {
+  width: 500px;
+  height: 500px;
+  top: 15%;
+  left: 20%;
+  background: radial-gradient(circle, rgba(255, 45, 85, 0.45) 0%, transparent 70%);
 }
 
-.opening-luffy-fullscreen-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 25%;
-  animation: luffyEpicKenBurns 5.5s ease-out forwards;
-  will-change: transform, filter;
+.opening-glow-2 {
+  width: 600px;
+  height: 600px;
+  bottom: 10%;
+  right: 15%;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.35) 0%, transparent 70%);
 }
 
-@keyframes luffyEpicKenBurns {
-  0% { transform: scale(1.15); filter: brightness(0.9) contrast(1.2); }
-  50% { transform: scale(1.06); filter: brightness(1.15) contrast(1.25); }
-  100% { transform: scale(1.01); filter: brightness(1.0) contrast(1.2); }
+/* 2. Top Department & University Badge */
+.opening-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 0.45rem 1.15rem;
+  border-radius: 50px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
-.opening-luffy-vignette {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 50% 50%, rgba(5, 5, 16, 0.3) 0%, rgba(5, 5, 16, 0.8) 65%, #050510 100%);
-  pointer-events: none;
+.opening-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #00f2fe;
+  box-shadow: 0 0 10px #00f2fe, 0 0 20px #00f2fe;
+  animation: pulseStatusDot 2s infinite ease-in-out;
 }
 
-/* 3. Center Interactive Container */
+@keyframes pulseStatusDot {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.4); opacity: 0.6; }
+}
+
+.opening-status-text {
+  font-family: var(--font-primary);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: #cbd5e1;
+  text-transform: uppercase;
+}
+
+/* 3. Narrative Quotes matching Portfolio Concept */
+.opening-quote-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.1rem;
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.opening-quote-text {
+  font-family: var(--font-primary);
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: #e2e8f0;
+  font-weight: 400;
+  font-style: italic;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+  opacity: 0.95;
+}
+
+.opening-quote-tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+}
+
+.opening-tag {
+  font-family: var(--font-primary);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #94a3b8;
+  background: rgba(15, 23, 42, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 0.3rem 0.85rem;
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.opening-tag i {
+  font-size: 0.75rem;
+}
+
+/* 4. Center Interactive Container */
 .opening-container {
   position: relative;
   z-index: 10;
@@ -2258,7 +2262,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2.2rem;
+  gap: 1.6rem;
   width: 100%;
   max-width: 900px;
   padding: 1.5rem;

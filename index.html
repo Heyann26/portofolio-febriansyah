@@ -23,29 +23,42 @@
 </head>
 <body>
 
-  <!-- CINEMATIC WEBGL LIGHTNING & PARTICLE OPENING SCREEN (5 SECONDS) -->
+  <!-- CINEMATIC IMMERSIVE OPENING SCREEN -->
   <div class="opening-screen" id="openingScreen">
-    <!-- WebGL Fullscreen Lightning Canvas Shader -->
-    <canvas id="openingLightningCanvas" class="opening-lightning-canvas"></canvas>
-
-    <!-- Fullscreen Dynamic Animated Luffy Background Blend -->
-    <div class="opening-luffy-fullscreen-wrap">
-      <img src="assets/images/luffy_fullscreen_opening.jpg?v=20261021d" alt="Monkey D. Luffy Fire Mode One Piece" class="opening-luffy-fullscreen-img" id="openingLuffyImg">
-      <div class="opening-luffy-vignette"></div>
-    </div>
+    <!-- Ambient Deep Glows -->
+    <div class="opening-ambient-glow opening-glow-1"></div>
+    <div class="opening-ambient-glow opening-glow-2"></div>
 
     <!-- Center Interactive Container -->
     <div class="opening-container">
       
-      <!-- Particle Text Canvas (Welcome To My Portofolio Website) -->
+      <!-- Top Department & University Badge -->
+      <div class="opening-status-badge">
+        <span class="opening-status-dot"></span>
+        <span class="opening-status-text">TEKNIK INFORMATIKA &bull; ITB AHMAD DAHLAN JAKARTA</span>
+      </div>
+
+      <!-- Particle Text Canvas (Muhammad Febriansyah • Creative Developer) -->
       <div class="opening-particle-canvas-wrap">
         <canvas id="openingParticleCanvas" class="opening-particle-canvas"></canvas>
+      </div>
+
+      <!-- Narrative Quotes matching Website Concept -->
+      <div class="opening-quote-wrap">
+        <p class="opening-quote-text">
+          &ldquo;Crafting high-performance web applications and seamless digital experiences through creative engineering.&rdquo;
+        </p>
+        <div class="opening-quote-tags">
+          <span class="opening-tag"><i class="fa-solid fa-code text-red"></i> Web Engineering</span>
+          <span class="opening-tag"><i class="fa-solid fa-layer-group text-blue"></i> UI/UX Design</span>
+          <span class="opening-tag"><i class="fa-solid fa-graduation-cap text-orange"></i> ITB-AD</span>
+        </div>
       </div>
 
       <!-- Minimalist Loading Box -->
       <div class="welcome-loading-box">
         <div class="welcome-loading-header">
-          <span>Loading</span>
+          <span>Inisialisasi Sistem</span>
           <span id="openingCounter">0%</span>
         </div>
         <div class="welcome-loading-track">
@@ -160,38 +173,23 @@
           <!-- Persona 1: Muhammad Febriansyah (Real Person in Suit, 100% Clean Cutout) -->
           <img 
             id="heroPortraitImg" 
-            src="assets/images/febri_official_portrait.png?v=20261021_nobox" 
+            src="assets/images/febri_official_portrait.png?v=20261021_cleantop" 
             alt="Muhammad Febriansyah" 
             class="hero-portrait-img"
           >
 
-          <!-- Periodic Hint Layer (Flashes softly when idle every ~4.5s just like reference!) -->
-          <div class="hero-luffy-hint" id="heroLuffyHint">
-            <img 
-              src="assets/images/luffy_matching_cutout.png?v=20261021_nobox" 
-              alt="Luffy Fire Mode Alter Ego Hint" 
-              class="hero-portrait-img luffy-cutout-img"
-            >
-          </div>
-
-          <!-- Persona 2: Luffy Fire Mode (Revealed in smooth radial circle directly at cursor coordinates!) -->
+          <!-- Persona 2: Luffy Fire Mode (Revealed smoothly directly at cursor position!) -->
           <div class="hero-luffy-overlay" id="heroLuffyOverlay">
             <img 
               id="heroPortraitLuffy" 
-              src="assets/images/luffy_matching_cutout.png?v=20261021_nobox" 
+              src="assets/images/luffy_matching_cutout.png?v=20261021_cleantop" 
               alt="Monkey D. Luffy Fire Mode Pose-Matched Cutout" 
               class="hero-portrait-img luffy-cutout-img"
             >
           </div>
 
-          <!-- Cursor Follower Indicator Dot (mix-blend-mode difference / fiery glow) -->
+          <!-- Cursor Follower Indicator Dot (Fiery glow on portrait) -->
           <div class="hero-cursor-follower-dot" id="heroCursorFollowerDot"></div>
-
-          <!-- Interactive Dual Persona Cursor Guide Indicator -->
-          <div class="dual-persona-badge" id="dualPersonaBadge">
-            <i class="fa-solid fa-wand-magic-sparkles text-red"></i>
-            <span>Arahkan kursor ke foto untuk melihat <strong>Luffy Fire Mode</strong></span>
-          </div>
         </div>
 
         <!-- Layer 3: Foreground Text Stroke (Depth Wrap Effect) -->

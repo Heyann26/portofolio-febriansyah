@@ -140,7 +140,6 @@ function initHeroParallax() {
   const portrait = document.getElementById('heroPortraitWrap');
   const strokeText = document.getElementById('heroStrokeTextWrap');
   const badge = document.getElementById('heroBadge');
-  const luffyHint = document.getElementById('heroLuffyHint');
 
   if (!stage || !portrait) return;
 
@@ -158,7 +157,6 @@ function initHeroParallax() {
   let smoothCursorY = -1000;
   let cursorVelX = 0;
   let cursorVelY = 0;
-  let hintTimer = 0;
 
   window.addEventListener('mousemove', (e) => {
     const cx = window.innerWidth / 2;
@@ -173,8 +171,7 @@ function initHeroParallax() {
     targetCursorY = clientY - rect.top;
     isPortraitHovered = true;
     portrait.style.setProperty('--luffy-opacity', '1');
-    portrait.style.setProperty('--reveal-radius', '135px');
-    if (luffyHint) luffyHint.style.opacity = '0';
+    portrait.style.setProperty('--reveal-radius', '140px');
   }
 
   portrait.addEventListener('mousemove', (e) => {
@@ -209,22 +206,6 @@ function initHeroParallax() {
       portrait.style.setProperty('--luffy-opacity', '0');
     }, 1200);
   });
-
-  // Periodic Idle Hint: every 4.8s softly pulse Luffy Fire Mode so user knows to hover!
-  function updateAlterEgoHint() {
-    if (isPortraitHovered) {
-      if (luffyHint) luffyHint.style.opacity = '0';
-      return;
-    }
-    hintTimer += 0.016;
-    const cycle = hintTimer % 5.0;
-    if (cycle < 1.3 && luffyHint) {
-      const alpha = Math.sin((cycle / 1.3) * Math.PI) * 0.85;
-      luffyHint.style.opacity = alpha.toFixed(3);
-    } else if (luffyHint) {
-      luffyHint.style.opacity = '0';
-    }
-  }
 
   function updateParallax() {
     idleTick += 1;
@@ -270,8 +251,6 @@ function initHeroParallax() {
 
       portrait.style.setProperty('--cursor-x', `${smoothCursorX.toFixed(1)}px`);
       portrait.style.setProperty('--cursor-y', `${smoothCursorY.toFixed(1)}px`);
-    } else {
-      updateAlterEgoHint();
     }
 
     if (badge) {
@@ -829,179 +808,8 @@ window.addEventListener('click', (e) => {
 });
 
 /* ==========================================================================
-   11. CINEMATIC WEBGL LIGHTNING SHADER & PARTICLE TEXT (TIKTOK REFERENCE)
+   11. CINEMATIC PARTICLE TEXT OPENING (MUHAMMAD FEBRIANSYAH)
    ========================================================================== */
-function initOpeningLightning() {
-  const canvas = document.getElementById('openingLightningCanvas');
-  if (!canvas) return null;
-  const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-  if (!gl) return null;
-
-  const vsSource = `
-    attribute vec2 aPosition;
-    void main() {
-      gl_Position = vec4(aPosition, 0.0, 1.0);
-    }
-  `;
-
-  const fsSource = `
-    precision mediump float;
-    uniform vec2 iResolution;
-    uniform float iTime;
-    uniform float uHue;
-    uniform float uXOffset;
-    uniform float uSpeed;
-    uniform float uIntensity;
-    uniform float uSize;
-    #define OCTAVE_COUNT 8
-    vec3 hsv2rgb(vec3 c) {
-        vec3 rgb = clamp(abs(mod(c.x * 6.0 + vec3(0.0,4.0,2.0), 6.0) - 3.0) - 1.0, 0.0, 1.0);
-        return c.z * mix(vec3(1.0), rgb, c.y);
-    }
-    float hash11(float p) {
-        p = fract(p * .1031);
-        p *= p + 33.33;
-        p *= p + p;
-        return fract(p);
-    }
-    float hash12(vec2 p) {
-        vec3 p3 = fract(vec3(p.xyx) * .1031);
-        p3 += dot(p3, p3.yzx + 33.33);
-        return fract((p3.x + p3.y) * p3.z);
-    }
-    mat2 rotate2d(float theta) {
-        float c = cos(theta);
-        float s = sin(theta);
-        return mat2(c, -s, s, c);
-    }
-    float noise(vec2 p) {
-        vec2 ip = floor(p);
-        vec2 fp = fract(p);
-        float a = hash12(ip);
-        float b = hash12(ip + vec2(1.0, 0.0));
-        float c = hash12(ip + vec2(0.0, 1.0));
-        float d = hash12(ip + vec2(1.0, 1.0));
-        vec2 t = smoothstep(0.0, 1.0, fp);
-        return mix(mix(a, b, t.x), mix(c, d, t.x), t.y);
-    }
-    float fbm(vec2 p) {
-        float value = 0.0;
-        float amplitude = 0.5;
-        for (int i = 0; i < OCTAVE_COUNT; ++i) {
-            value += amplitude * noise(p);
-            p *= rotate2d(0.45);
-            p *= 2.0;
-            amplitude *= 0.5;
-        }
-        return value;
-    }
-    void mainImage( out vec4 fragColor, in vec2 fragCoord ) {
-      vec2 uv = fragCoord / iResolution.xy;
-      uv = 2.0 * uv - 1.0;
-      float aspect = iResolution.x / iResolution.y;
-      uv.x *= aspect;
-      uv.x += uXOffset;
-        
-      // 1. Macroscopic sine path
-      float path = sin(uv.y * 3.0 - iTime * 2.5) * 0.25 
-                 + sin(uv.y * 5.0 + iTime * 1.5) * 0.15;
-        
-      // 2. Microscopic noise
-      vec2 noiseUv = uv * uSize * 1.5;
-      float n = 2.0 * fbm(noiseUv + 1.2 * iTime * uSpeed) - 1.0;
-        
-      float scale = aspect < 1.0 ? (aspect * 1.1) : 1.0;
-      float center = (path + n * 0.4) * scale;
-        
-      uv.y += n * 0.2 * scale;
-      float dist = abs(uv.x - center);
-        
-      vec3 baseColor = hsv2rgb(vec3(uHue / 360.0, 0.72, 0.95));
-      vec3 col = baseColor * pow(mix(0.0, 0.07, hash11(iTime * uSpeed)) / dist, 1.0) * uIntensity;
-      float alpha = clamp(max(col.r, max(col.g, col.b)), 0.0, 1.0);
-      fragColor = vec4(col, alpha);
-    }
-    void main() {
-        mainImage(gl_FragColor, gl_FragCoord.xy);
-    }
-  `;
-
-  function createShader(type, src) {
-    const s = gl.createShader(type);
-    gl.shaderSource(s, src);
-    gl.compileShader(s);
-    if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
-      gl.deleteShader(s);
-      return null;
-    }
-    return s;
-  }
-
-  const vs = createShader(gl.VERTEX_SHADER, vsSource);
-  const fs = createShader(gl.FRAGMENT_SHADER, fsSource);
-  if (!vs || !fs) return null;
-
-  const prog = gl.createProgram();
-  gl.attachShader(prog, vs);
-  gl.attachShader(prog, fs);
-  gl.linkProgram(prog);
-  if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) return null;
-  gl.useProgram(prog);
-
-  const quadBuffer = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, quadBuffer);
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
-    -1, -1,  1, -1, -1,  1,
-    -1,  1,  1, -1,  1,  1
-  ]), gl.STATIC_DRAW);
-
-  const aPos = gl.getAttribLocation(prog, "aPosition");
-  gl.enableVertexAttribArray(aPos);
-  gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
-
-  const uRes = gl.getUniformLocation(prog, "iResolution");
-  const uTime = gl.getUniformLocation(prog, "iTime");
-  const uHue = gl.getUniformLocation(prog, "uHue");
-  const uXOffset = gl.getUniformLocation(prog, "uXOffset");
-  const uSpeed = gl.getUniformLocation(prog, "uSpeed");
-  const uIntensity = gl.getUniformLocation(prog, "uIntensity");
-  const uSize = gl.getUniformLocation(prog, "uSize");
-
-  function resize() {
-    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
-    canvas.width = Math.floor(window.innerWidth * dpr);
-    canvas.height = Math.floor(window.innerHeight * dpr);
-  }
-  resize();
-  window.addEventListener('resize', resize);
-
-  const startTime = performance.now();
-  let animId;
-
-  function render(now) {
-    if (document.hidden) {
-      animId = requestAnimationFrame(render);
-      return;
-    }
-    gl.viewport(0, 0, canvas.width, canvas.height);
-    gl.uniform2f(uRes, canvas.width, canvas.height);
-    gl.uniform1f(uTime, (now - startTime) / 1000);
-    gl.uniform1f(uHue, 218.0); // Electric Blue Lightning matching reference
-    gl.uniform1f(uXOffset, 0.0);
-    gl.uniform1f(uSpeed, 1.5);
-    gl.uniform1f(uIntensity, 1.25);
-    gl.uniform1f(uSize, 1.8);
-    gl.drawArrays(gl.TRIANGLES, 0, 6);
-
-    animId = requestAnimationFrame(render);
-  }
-  animId = requestAnimationFrame(render);
-
-  return () => {
-    cancelAnimationFrame(animId);
-    window.removeEventListener('resize', resize);
-  };
-}
 
 function initOpeningParticleText() {
   const canvas = document.getElementById('openingParticleCanvas');
@@ -1087,23 +895,27 @@ function initOpeningParticleText() {
     octx.textAlign = 'center';
     octx.textBaseline = 'middle';
 
-    const scale = Math.min(1, w / 750);
-    const size1 = Math.round(50 * scale);
-    const size2 = Math.round(64 * scale);
+    const scale = Math.min(1, w / 780);
+    const size1 = Math.round(44 * scale);
+    const size2 = Math.round(56 * scale);
 
-    // Line 1: Welcome To My (Crisp white to cyan gradient)
-    octx.font = `bold ${size1}px 'Plus Jakarta Sans', Arial, sans-serif`;
-    const grad1 = octx.createLinearGradient(w / 2 - 220, 0, w / 2 + 220, 0);
+    // Line 1: MUHAMMAD FEBRIANSYAH (Crisp modern typography)
+    octx.font = `900 ${size1}px 'Plus Jakarta Sans', 'Outfit', Arial, sans-serif`;
+    const grad1 = octx.createLinearGradient(w / 2 - 240, 0, w / 2 + 240, 0);
     grad1.addColorStop(0, '#ffffff');
-    grad1.addColorStop(0.5, '#dbeafe');
-    grad1.addColorStop(1, '#bfdbfe');
+    grad1.addColorStop(0.5, '#f1f5f9');
+    grad1.addColorStop(1, '#e2e8f0');
     octx.fillStyle = grad1;
-    octx.fillText('Welcome To My', w / 2, h / 2 - size1 * 0.7);
+    octx.fillText('MUHAMMAD FEBRIANSYAH', w / 2, h / 2 - size1 * 0.65);
 
-    // Line 2: Portofolio Website (Signature electric crimson/blue)
-    octx.font = `bold ${size2}px 'Plus Jakarta Sans', Arial, sans-serif`;
-    octx.fillStyle = '#ff2d55';
-    octx.fillText('Portofolio Website', w / 2, h / 2 + size2 * 0.7);
+    // Line 2: CREATIVE DEVELOPER (Signature fiery crimson/coral accent)
+    octx.font = `800 ${size2}px 'Plus Jakarta Sans', Arial, sans-serif`;
+    const grad2 = octx.createLinearGradient(w / 2 - 200, 0, w / 2 + 200, 0);
+    grad2.addColorStop(0, '#ff2d55');
+    grad2.addColorStop(0.5, '#ff5500');
+    grad2.addColorStop(1, '#ff3b30');
+    octx.fillStyle = grad2;
+    octx.fillText('CREATIVE DEVELOPER', w / 2, h / 2 + size2 * 0.75);
 
     const imgData = octx.getImageData(0, 0, w, h).data;
     const pixels = [];
@@ -1188,11 +1000,10 @@ function initOpeningScreen() {
 
   if (!screen) return;
 
-  // Initialize WebGL Lightning & Particle text
-  const stopLightning = initOpeningLightning();
+  // Initialize Particle text
   const stopParticles = initOpeningParticleText();
 
-  const DURATION_MS = 5000; // 5.0 detik
+  const DURATION_MS = 4200; // 4.2 detik
   const startTime = Date.now();
   let finished = false;
 
@@ -1210,7 +1021,6 @@ function initOpeningScreen() {
 
       setTimeout(() => {
         screen.style.display = 'none';
-        if (stopLightning) stopLightning();
         if (stopParticles) stopParticles();
       }, 900);
     }, 280);
