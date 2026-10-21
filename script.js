@@ -810,6 +810,84 @@ window.addEventListener('click', (e) => {
 /* ==========================================================================
    11. CINEMATIC OPENING CONTROLLER (KINETIC TYPOGRAPHY & PROGRESS SYSTEM)
    ========================================================================== */
+function initOpeningEmbers() {
+  const canvas = document.getElementById('openingEmbersCanvas');
+  if (!canvas) return { stop: () => {} };
+
+  const ctx = canvas.getContext('2d');
+  let width = (canvas.width = window.innerWidth);
+  let height = (canvas.height = window.innerHeight);
+
+  const handleResize = () => {
+    if (!canvas) return;
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+  };
+  window.addEventListener('resize', handleResize);
+
+  let isRunning = true;
+  const emberCount = width > 768 ? 48 : 28;
+  const embers = [];
+
+  for (let i = 0; i < emberCount; i++) {
+    embers.push({
+      x: Math.random() * width,
+      y: height + Math.random() * 80,
+      size: Math.random() * 2.6 + 1.2,
+      speedY: Math.random() * 1.8 + 0.9,
+      speedX: (Math.random() - 0.5) * 0.9,
+      wobbleSpeed: Math.random() * 0.04 + 0.02,
+      wobbleOffset: Math.random() * Math.PI * 2,
+      opacity: Math.random() * 0.6 + 0.35,
+      hue: Math.random() > 0.4 ? (Math.random() * 22 + 15) : (Math.random() * 15 + 355) // warm flame orange & crimson
+    });
+  }
+
+  let animFrameId = null;
+
+  function renderEmbers() {
+    if (!isRunning) return;
+    ctx.clearRect(0, 0, width, height);
+
+    const time = Date.now() * 0.003;
+
+    for (let i = 0; i < embers.length; i++) {
+      const e = embers[i];
+      e.y -= e.speedY;
+      e.x += e.speedX + Math.sin(time + e.wobbleOffset) * 0.6;
+      e.opacity -= 0.0018;
+
+      if (e.y < -20 || e.opacity <= 0.05 || e.x < -30 || e.x > width + 30) {
+        e.y = height + Math.random() * 40;
+        e.x = width * 0.15 + Math.random() * (width * 0.7);
+        e.opacity = Math.random() * 0.65 + 0.35;
+        e.speedY = Math.random() * 1.8 + 0.9;
+      }
+
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(e.x, e.y, e.size, 0, Math.PI * 2);
+      ctx.fillStyle = `hsla(${e.hue}, 100%, 60%, ${e.opacity})`;
+      ctx.shadowColor = `hsla(${e.hue}, 100%, 50%, 0.8)`;
+      ctx.shadowBlur = e.size * 4;
+      ctx.fill();
+      ctx.restore();
+    }
+
+    animFrameId = requestAnimationFrame(renderEmbers);
+  }
+
+  animFrameId = requestAnimationFrame(renderEmbers);
+
+  return {
+    stop: () => {
+      isRunning = false;
+      if (animFrameId) cancelAnimationFrame(animFrameId);
+      window.removeEventListener('resize', handleResize);
+    }
+  };
+}
+
 function initOpeningScreen() {
   const screen = document.getElementById('openingScreen');
   const bar = document.getElementById('openingProgressBar');
@@ -820,6 +898,7 @@ function initOpeningScreen() {
 
   if (!screen) return;
 
+  const embersCtrl = initOpeningEmbers();
   const DURATION_MS = 3800; // 3.8 detik smooth cinematic intro
   const startTime = Date.now();
   let finished = false;
@@ -827,6 +906,7 @@ function initOpeningScreen() {
   function finishIntro() {
     if (finished) return;
     finished = true;
+    embersCtrl.stop();
 
     if (bar) bar.style.width = '100%';
     if (counter) counter.innerText = '100%';

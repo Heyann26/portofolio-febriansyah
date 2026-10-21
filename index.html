@@ -25,9 +25,9 @@
 
   <!-- CINEMATIC IMMERSIVE OPENING SCREEN (MATCHES INNER BG CONCEPT) -->
   <div class="opening-screen" id="openingScreen">
-    <!-- Ambient Glows matching Hero Stage Background -->
-    <div class="ambient-glow glow-top" style="opacity: 0.6;"></div>
-    <div class="ambient-glow glow-hero-center" style="opacity: 0.5;"></div>
+    <!-- Ambient Fiery Glow & Rising Embers (NO AI-slop circular orbs) -->
+    <div class="opening-fire-glow"></div>
+    <canvas id="openingEmbersCanvas" class="opening-embers-canvas"></canvas>
 
     <!-- Center Interactive Container -->
     <div class="opening-container">
@@ -171,15 +171,15 @@
 
         <!-- Layer 1: Giant Background Text (Behind Subject) -->
         <div class="hero-bg-text-wrap" id="heroBgTextWrap">
-          <h1 class="hero-bg-text" id="heroBgText">FEBRIANSYAH</h1>
+          <h1 class="hero-bg-text" id="heroBgText">MUHAMMAD FEBRIANSYAH</h1>
         </div>
 
         <!-- Layer 2: Subject Cutout Image & Dual Persona (Febriansyah x Pose-Matched Luffy Fire Mode) -->
         <div class="hero-portrait-wrap" id="heroPortraitWrap">
-          <!-- Persona 1: Muhammad Febriansyah (Real Person in Suit, 100% Clean Cutout) -->
+          <!-- Persona 1: Muhammad Febriansyah (Real Person in Suit, 100% Clean Cutout with Complete Shoulders) -->
           <img 
             id="heroPortraitImg" 
-            src="assets/images/febri_official_portrait.png?v=20261021_cleantop" 
+            src="assets/images/febri_official_portrait.png?v=20261021_master_v3" 
             alt="Muhammad Febriansyah" 
             class="hero-portrait-img"
           >
@@ -188,7 +188,7 @@
           <div class="hero-luffy-overlay" id="heroLuffyOverlay">
             <img 
               id="heroPortraitLuffy" 
-              src="assets/images/luffy_matching_cutout.png?v=20261021_cleantop" 
+              src="assets/images/luffy_matching_cutout.png?v=20261021_master_v3" 
               alt="Monkey D. Luffy Fire Mode Pose-Matched Cutout" 
               class="hero-portrait-img luffy-cutout-img"
             >
@@ -200,7 +200,7 @@
 
         <!-- Layer 3: Foreground Text Stroke (Depth Wrap Effect) -->
         <div class="hero-stroke-text-wrap" id="heroStrokeTextWrap" aria-hidden="true">
-          <div class="hero-stroke-text" id="heroStrokeText">FEBRIANSYAH</div>
+          <div class="hero-stroke-text" id="heroStrokeText">MUHAMMAD FEBRIANSYAH</div>
         </div>
 
         <!-- Floating Status / Info Card -->
