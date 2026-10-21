@@ -529,13 +529,8 @@ function saveSettings() {
 }
 
 function loadSavedSettings() {
-  const savedPhoto = localStorage.getItem('portfolio_photo');
+  localStorage.removeItem('portfolio_photo'); // Clear any legacy cache
   const savedScale = localStorage.getItem('portfolio_scale');
-  const savedOffset = localStorage.getItem('portfolio_offset');
-  const savedHeroText = localStorage.getItem('portfolio_herotext');
-  const savedSubtitle = localStorage.getItem('portfolio_subtitle');
-
-  if (savedPhoto) applyPortraitSrc(savedPhoto);
 
   if (savedScale && document.getElementById('photoScale')) {
     document.getElementById('photoScale').value = savedScale;
