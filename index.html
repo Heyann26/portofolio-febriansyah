@@ -29,6 +29,17 @@
 
     <div class="opening-container">
       
+      <!-- Anime Luffy One Piece Mode Api Avatar -->
+      <div class="opening-luffy-card" id="openingLuffyCard">
+        <div class="luffy-flame-halo"></div>
+        <div class="luffy-avatar-frame">
+          <img src="assets/images/luffy_fire_intro.jpg" alt="Luffy Fire Mode One Piece" class="luffy-intro-img">
+        </div>
+        <div class="luffy-badge-pill">
+          <i class="fa-solid fa-fire-flame-curved text-red"></i> <span>MONKEY D. LUFFY &bull; RED HAWK MODE</span>
+        </div>
+      </div>
+
       <!-- Minimalist Tagline -->
       <div class="opening-badge">
         <span class="opening-badge-line"></span>
@@ -162,15 +173,38 @@
           <h1 class="hero-bg-text" id="heroBgText">FEBRIANSYAH</h1>
         </div>
 
-        <!-- Layer 2: Subject Cutout Image -->
+        <!-- Layer 2: Subject Cutout Image & Dual Persona (Febriansyah x Luffy Fire Mode) -->
         <div class="hero-portrait-wrap" id="heroPortraitWrap">
+          <!-- Persona 1: Muhammad Febriansyah (Real Person in Suit) -->
           <img 
             id="heroPortraitImg" 
             src="assets/images/febri_official_portrait.png?v=20261021" 
             alt="Muhammad Febriansyah" 
             class="hero-portrait-img"
           >
+
+          <!-- Persona 2: Luffy Fire Mode (Alter Ego Revealed Dynamically by Cursor) -->
+          <div class="hero-luffy-overlay" id="heroLuffyOverlay">
+            <img 
+              id="heroPortraitLuffy" 
+              src="assets/images/luffy_fire_cutout.png" 
+              alt="Luffy Fire Mode One Piece Cutout" 
+              class="hero-portrait-img luffy-cutout-img"
+            >
+            <!-- Blazing Flame Divider Line -->
+            <div class="luffy-flame-edge" id="luffyFlameEdge"></div>
+          </div>
+
           <div class="hero-portrait-fade"></div>
+
+          <!-- Interactive Dual Persona Cursor Guide Indicator -->
+          <div class="dual-persona-badge" id="dualPersonaBadge" title="Geser kursor mouse ke kiri/kanan untuk bertransformasi">
+            <span class="persona-label persona-febri" id="badgeFebri">Febriansyah</span>
+            <div class="persona-bar-track">
+              <div class="persona-bar-fill" id="personaBarFill"></div>
+            </div>
+            <span class="persona-label persona-luffy" id="badgeLuffy"><i class="fa-solid fa-fire text-red"></i> Luffy Fire</span>
+          </div>
         </div>
 
         <!-- Layer 3: Foreground Text Stroke (Depth Wrap Effect) -->

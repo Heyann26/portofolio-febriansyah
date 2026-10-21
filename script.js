@@ -140,6 +140,11 @@ function initHeroParallax() {
   const portrait = document.getElementById('heroPortraitWrap');
   const strokeText = document.getElementById('heroStrokeTextWrap');
   const badge = document.getElementById('heroBadge');
+  const luffyOverlay = document.getElementById('heroLuffyOverlay');
+  const luffyFlameEdge = document.getElementById('luffyFlameEdge');
+  const personaBarFill = document.getElementById('personaBarFill');
+  const badgeFebri = document.getElementById('badgeFebri');
+  const badgeLuffy = document.getElementById('badgeLuffy');
 
   if (!stage || !portrait) return;
 
@@ -185,6 +190,33 @@ function initHeroParallax() {
       const offsetY = +(portrait.dataset.offsetY || 0);
       const portraitScrollY = -scrollY * 0.28;
       portrait.style.transform = `translate(calc(-50% + ${mouseX * 28}px), ${offsetY + portraitScrollY + idleFloat}px) scale(${scale})`;
+    }
+
+    // DUAL PERSONA REVEAL (2 Orang dalam 1 Orang: Febriansyah x Luffy Fire Mode)
+    // As cursor moves horizontally, the flaming divider sweeps across!
+    const morphProgress = Math.max(0.02, Math.min(0.98, (mouseX * 0.55 + 0.5)));
+    const morphPercent = (morphProgress * 100).toFixed(1);
+
+    if (luffyOverlay) {
+      luffyOverlay.style.clipPath = `polygon(${morphPercent}% 0, 100% 0, 100% 100%, ${morphPercent}% 100%)`;
+    }
+    if (luffyFlameEdge) {
+      luffyFlameEdge.style.left = `${morphPercent}%`;
+    }
+    if (personaBarFill) {
+      personaBarFill.style.width = `${morphPercent}%`;
+    }
+    if (badgeFebri && badgeLuffy) {
+      if (morphProgress < 0.35) {
+        badgeFebri.classList.add('active');
+        badgeLuffy.classList.remove('active');
+      } else if (morphProgress > 0.65) {
+        badgeFebri.classList.remove('active');
+        badgeLuffy.classList.add('active');
+      } else {
+        badgeFebri.classList.add('active');
+        badgeLuffy.classList.add('active'); // Dual persona active!
+      }
     }
 
     if (badge) {
