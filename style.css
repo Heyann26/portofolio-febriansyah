@@ -409,44 +409,7 @@ body {
   white-space: nowrap;
 }
 
-/* Layer 2: Subject Cutout Image */
-.hero-portrait-wrap {
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  height: 86vh;
-  max-height: 860px;
-  z-index: 3;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  pointer-events: none;
-  will-change: transform;
-}
-
-.hero-portrait-img {
-  height: 100%;
-  max-width: 90vw;
-  object-fit: contain;
-  object-position: bottom center;
-  filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.85));
-  transition: transform 0.1s ease-out;
-}
-
-/* Soft Bottom Fade for seamless transition */
-.hero-portrait-fade {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 160px;
-  background: linear-gradient(to top, var(--bg-main) 10%, rgba(7, 7, 9, 0.6) 50%, transparent 100%);
-  pointer-events: none;
-  z-index: 4;
-}
-
-/* Dual Persona Luffy Fire Mode Overlay (Revealed Dynamically by Cursor Position) */
+/* Layer 2: Subject Cutout Image & Dual Persona Wrapper */
 .hero-portrait-wrap {
   position: absolute;
   bottom: 0;
@@ -461,6 +424,24 @@ body {
   pointer-events: auto; /* Enable cursor tracking directly on portrait */
   cursor: crosshair;
   will-change: transform;
+  /* Seamless bottom blend into background without box artifacts */
+  -webkit-mask-image: linear-gradient(to bottom, #000 82%, transparent 99%);
+  mask-image: linear-gradient(to bottom, #000 82%, transparent 99%);
+}
+
+.hero-portrait-img {
+  height: 100%;
+  max-width: 90vw;
+  object-fit: contain;
+  object-position: bottom center;
+  filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.85));
+  transition: transform 0.1s ease-out;
+  pointer-events: none;
+}
+
+/* Neutralized fade div to prevent dark box artifacts */
+.hero-portrait-fade {
+  display: none !important;
 }
 
 /* Idle Hint Layer (Spider-Man / Luffy Alter Ego Periodic Flash) */
