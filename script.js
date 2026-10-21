@@ -140,11 +140,6 @@ function initHeroParallax() {
   const portrait = document.getElementById('heroPortraitWrap');
   const strokeText = document.getElementById('heroStrokeTextWrap');
   const badge = document.getElementById('heroBadge');
-  const luffyOverlay = document.getElementById('heroLuffyOverlay');
-  const luffyFlameEdge = document.getElementById('luffyFlameEdge');
-  const personaBarFill = document.getElementById('personaBarFill');
-  const badgeFebri = document.getElementById('badgeFebri');
-  const badgeLuffy = document.getElementById('badgeLuffy');
 
   if (!stage || !portrait) return;
 
@@ -159,6 +154,49 @@ function initHeroParallax() {
     const cy = window.innerHeight / 2;
     targetX = (e.clientX - cx) / cx;
     targetY = (e.clientY - cy) / cy;
+  });
+
+  // CURSOR-DIRECTED REVEAL (Luffy Fire Mode muncul tepat di posisi kursor pada foto)
+  function handleCursorOnPortrait(clientX, clientY) {
+    const rect = portrait.getBoundingClientRect();
+    const localX = clientX - rect.left;
+    const localY = clientY - rect.top;
+
+    portrait.style.setProperty('--cursor-x', `${localX.toFixed(1)}px`);
+    portrait.style.setProperty('--cursor-y', `${localY.toFixed(1)}px`);
+    portrait.style.setProperty('--luffy-opacity', '1');
+    portrait.style.setProperty('--reveal-radius', '175px');
+  }
+
+  portrait.addEventListener('mousemove', (e) => {
+    handleCursorOnPortrait(e.clientX, e.clientY);
+  });
+
+  portrait.addEventListener('mouseenter', (e) => {
+    handleCursorOnPortrait(e.clientX, e.clientY);
+  });
+
+  portrait.addEventListener('mouseleave', () => {
+    portrait.style.setProperty('--luffy-opacity', '0');
+  });
+
+  // Mobile Touch Support for Luffy Reveal
+  portrait.addEventListener('touchstart', (e) => {
+    if (e.touches && e.touches[0]) {
+      handleCursorOnPortrait(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  }, { passive: true });
+
+  portrait.addEventListener('touchmove', (e) => {
+    if (e.touches && e.touches[0]) {
+      handleCursorOnPortrait(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  }, { passive: true });
+
+  portrait.addEventListener('touchend', () => {
+    setTimeout(() => {
+      portrait.style.setProperty('--luffy-opacity', '0');
+    }, 1200);
   });
 
   function updateParallax() {
@@ -190,33 +228,6 @@ function initHeroParallax() {
       const offsetY = +(portrait.dataset.offsetY || 0);
       const portraitScrollY = -scrollY * 0.28;
       portrait.style.transform = `translate(calc(-50% + ${mouseX * 28}px), ${offsetY + portraitScrollY + idleFloat}px) scale(${scale})`;
-    }
-
-    // DUAL PERSONA REVEAL (2 Orang dalam 1 Orang: Febriansyah x Luffy Fire Mode)
-    // As cursor moves horizontally, the flaming divider sweeps across!
-    const morphProgress = Math.max(0.02, Math.min(0.98, (mouseX * 0.55 + 0.5)));
-    const morphPercent = (morphProgress * 100).toFixed(1);
-
-    if (luffyOverlay) {
-      luffyOverlay.style.clipPath = `polygon(${morphPercent}% 0, 100% 0, 100% 100%, ${morphPercent}% 100%)`;
-    }
-    if (luffyFlameEdge) {
-      luffyFlameEdge.style.left = `${morphPercent}%`;
-    }
-    if (personaBarFill) {
-      personaBarFill.style.width = `${morphPercent}%`;
-    }
-    if (badgeFebri && badgeLuffy) {
-      if (morphProgress < 0.35) {
-        badgeFebri.classList.add('active');
-        badgeLuffy.classList.remove('active');
-      } else if (morphProgress > 0.65) {
-        badgeFebri.classList.remove('active');
-        badgeLuffy.classList.add('active');
-      } else {
-        badgeFebri.classList.add('active');
-        badgeLuffy.classList.add('active'); // Dual persona active!
-      }
     }
 
     if (badge) {
@@ -774,7 +785,7 @@ window.addEventListener('click', (e) => {
 });
 
 /* ==========================================================================
-   11. CINEMATIC EDITORIAL OPENING INTRO (CLEAN & NON-AI-SLOP)
+   11. CINEMATIC FULL-SCREEN LUFFY OPENING (5 SECONDS COUNTDOWN)
    ========================================================================== */
 function initOpeningScreen() {
   const screen = document.getElementById('openingScreen');
@@ -792,14 +803,16 @@ function initOpeningScreen() {
     span.style.animationDelay = `${(i * 0.035 + 0.1).toFixed(2)}s`;
   });
 
-  let progress = 0;
+  const TOTAL_DURATION_MS = 5000; // Persis 5 Detik
+  const startTime = Date.now();
   let finished = false;
 
   const statusMilestones = [
-    { at: 0, text: "MEMUAT SISTEM..." },
-    { at: 35, text: "MENGHUBUNGKAN ASET PORTOFOLIO..." },
-    { at: 70, text: "MENYIAPKAN INTERFACE..." },
-    { at: 95, text: "SELAMAT DATANG" }
+    { at: 0, text: "MEMBANGKITKAN LUFFY FIRE GEAR..." },
+    { at: 25, text: "MENGHUBUNGKAN ASET PORTOFOLIO..." },
+    { at: 55, text: "KALIBRASI VISUAL 3D PARALLAX..." },
+    { at: 80, text: "MENYIAPKAN PENGALAMAN INTERAKTIF..." },
+    { at: 96, text: "SELAMAT DATANG DI PORTOFOLIO!" }
   ];
 
   function finishIntro() {
@@ -808,7 +821,7 @@ function initOpeningScreen() {
 
     bar.style.width = '100%';
     counter.innerText = '100%';
-    if (statusText) statusText.innerHTML = 'SELAMAT DATANG';
+    if (statusText) statusText.innerHTML = 'SELAMAT DATANG!';
 
     setTimeout(() => {
       screen.classList.add('loaded');
@@ -817,7 +830,7 @@ function initOpeningScreen() {
       setTimeout(() => {
         screen.style.display = 'none';
       }, 850);
-    }, 320);
+    }, 280);
   }
 
   // Quick Skip trigger
@@ -828,30 +841,28 @@ function initOpeningScreen() {
     if (e.key === 'Escape') finishIntro();
   });
 
-  // Smooth loading progression (~1.8 seconds total)
+  // Accurate 5.0s Progress Update
   const interval = setInterval(() => {
     if (finished) {
       clearInterval(interval);
       return;
     }
 
-    let inc = 1;
-    if (progress < 40) inc = Math.floor(Math.random() * 5) + 3;
-    else if (progress < 80) inc = Math.floor(Math.random() * 4) + 2;
-    else inc = Math.floor(Math.random() * 3) + 2;
+    const elapsed = Date.now() - startTime;
+    const progress = Math.min(100, (elapsed / TOTAL_DURATION_MS) * 100);
+    const remainingSec = Math.max(0, (TOTAL_DURATION_MS - elapsed) / 1000).toFixed(1);
 
-    progress = Math.min(100, progress + inc);
-    bar.style.width = `${progress}%`;
-    counter.innerText = `${progress}%`;
+    bar.style.width = `${progress.toFixed(1)}%`;
+    counter.innerText = `${Math.floor(progress)}%`;
 
     const milestone = [...statusMilestones].reverse().find(m => progress >= m.at);
     if (milestone && statusText) {
-      statusText.innerHTML = milestone.text;
+      statusText.innerHTML = `${milestone.text} &bull; ${remainingSec}s`;
     }
 
     if (progress >= 100) {
       clearInterval(interval);
       finishIntro();
     }
-  }, 36);
+  }, 30);
 }

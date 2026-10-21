@@ -23,21 +23,29 @@
 </head>
 <body>
 
-  <!-- CINEMATIC EDITORIAL OPENING SCREEN (CLEAN & NON-AI-SLOP) -->
+  <!-- CINEMATIC FULL-SCREEN LUFFY OPENING (5 SECONDS ANIMATION) -->
   <div class="opening-screen" id="openingScreen">
-    <div class="opening-ambient-glow"></div>
+    <!-- Fullscreen Dynamic Animated Luffy Background -->
+    <div class="opening-luffy-fullscreen-wrap">
+      <img src="assets/images/luffy_fullscreen_opening.jpg?v=20261021c" alt="Monkey D. Luffy Fire Mode One Piece" class="opening-luffy-fullscreen-img" id="openingLuffyImg">
+      <div class="opening-luffy-heat-wave"></div>
+      <div class="opening-luffy-vignette"></div>
+      <div class="opening-flame-embers">
+        <span class="ember e1"></span>
+        <span class="ember e2"></span>
+        <span class="ember e3"></span>
+        <span class="ember e4"></span>
+        <span class="ember e5"></span>
+        <span class="ember e6"></span>
+      </div>
+    </div>
 
     <div class="opening-container">
       
-      <!-- Anime Luffy One Piece Mode Api Avatar -->
-      <div class="opening-luffy-card" id="openingLuffyCard">
-        <div class="luffy-flame-halo"></div>
-        <div class="luffy-avatar-frame">
-          <img src="assets/images/luffy_fire_intro.jpg" alt="Luffy Fire Mode One Piece" class="luffy-intro-img">
-        </div>
-        <div class="luffy-badge-pill">
-          <i class="fa-solid fa-fire-flame-curved text-red"></i> <span>MONKEY D. LUFFY &bull; RED HAWK MODE</span>
-        </div>
+      <!-- Top Anime Flame Mode Tag -->
+      <div class="opening-luffy-tag">
+        <i class="fa-solid fa-fire-flame-curved text-red flame-icon-bounce"></i>
+        <span>MONKEY D. LUFFY &bull; RED HAWK GEAR MODE</span>
       </div>
 
       <!-- Minimalist Tagline -->
@@ -47,7 +55,7 @@
         <span class="opening-badge-line"></span>
       </div>
 
-      <!-- Main Reveal Title (Clean, distinct words, no random dots) -->
+      <!-- Main Reveal Title -->
       <div class="opening-title-wrap">
         <h1 class="opening-title" id="openingTitle">
           <span class="word-group">
@@ -58,16 +66,16 @@
             <span class="char-span">F</span><span class="char-span">E</span><span class="char-span">B</span><span class="char-span">R</span><span class="char-span">I</span><span class="char-span">A</span><span class="char-span">N</span><span class="char-span">S</span><span class="char-span">Y</span><span class="char-span">A</span><span class="char-span">H</span>
           </span>
         </h1>
-        <p class="opening-sub">S1 MANAJEMEN / ITB AHMAD DAHLAN JAKARTA / @Heyann26</p>
+        <p class="opening-sub">S1 MANAJEMEN / ITB AHMAD DAHLAN JAKARTA &bull; @Heyann26</p>
       </div>
 
-      <!-- Minimalist Precision Progress Track -->
+      <!-- 5-Second Precision Progress Track -->
       <div class="opening-progress-box">
         <div class="opening-progress-track">
           <div class="opening-progress-bar" id="openingProgressBar"></div>
         </div>
         <div class="opening-status">
-          <span class="opening-status-text" id="openingStatusText">MEMUAT SISTEM</span>
+          <span class="opening-status-text" id="openingStatusText">MEMUAT SISTEM &bull; 5.0s</span>
           <span class="opening-counter" id="openingCounter">0%</span>
         </div>
       </div>
@@ -75,8 +83,8 @@
     </div>
 
     <!-- Quick Skip Button -->
-    <button class="opening-skip-btn" id="openingSkipBtn" title="Lewati Pembuka">
-      <span>LEWATI</span> <i class="fa-solid fa-arrow-right"></i>
+    <button class="opening-skip-btn" id="openingSkipBtn" title="Lewati Pembuka (5 Detik)">
+      <span>LEWATI</span> <i class="fa-solid fa-forward-step"></i>
     </button>
   </div>
 
@@ -173,37 +181,35 @@
           <h1 class="hero-bg-text" id="heroBgText">FEBRIANSYAH</h1>
         </div>
 
-        <!-- Layer 2: Subject Cutout Image & Dual Persona (Febriansyah x Luffy Fire Mode) -->
+        <!-- Layer 2: Subject Cutout Image & Dual Persona (Febriansyah x Pose-Matched Luffy Fire Mode) -->
         <div class="hero-portrait-wrap" id="heroPortraitWrap">
-          <!-- Persona 1: Muhammad Febriansyah (Real Person in Suit) -->
+          <!-- Persona 1: Muhammad Febriansyah (Real Person in Suit, Precision Clean Edge Cutout) -->
           <img 
             id="heroPortraitImg" 
-            src="assets/images/febri_official_portrait.png?v=20261021" 
+            src="assets/images/febri_official_portrait.png?v=20261021c" 
             alt="Muhammad Febriansyah" 
             class="hero-portrait-img"
           >
 
-          <!-- Persona 2: Luffy Fire Mode (Alter Ego Revealed Dynamically by Cursor) -->
+          <!-- Persona 2: Luffy Fire Mode (Pose-Matched, Revealed Directly by Cursor Position) -->
           <div class="hero-luffy-overlay" id="heroLuffyOverlay">
             <img 
               id="heroPortraitLuffy" 
-              src="assets/images/luffy_fire_cutout.png" 
-              alt="Luffy Fire Mode One Piece Cutout" 
+              src="assets/images/luffy_matching_cutout.png?v=20261021c" 
+              alt="Monkey D. Luffy Fire Mode Pose-Matched Cutout" 
               class="hero-portrait-img luffy-cutout-img"
             >
-            <!-- Blazing Flame Divider Line -->
-            <div class="luffy-flame-edge" id="luffyFlameEdge"></div>
           </div>
+
+          <!-- Cursor-Follower Fiery Spotlight Aura over Portrait -->
+          <div class="hero-flame-cursor-aura" id="heroFlameCursorAura"></div>
 
           <div class="hero-portrait-fade"></div>
 
           <!-- Interactive Dual Persona Cursor Guide Indicator -->
-          <div class="dual-persona-badge" id="dualPersonaBadge" title="Geser kursor mouse ke kiri/kanan untuk bertransformasi">
-            <span class="persona-label persona-febri" id="badgeFebri">Febriansyah</span>
-            <div class="persona-bar-track">
-              <div class="persona-bar-fill" id="personaBarFill"></div>
-            </div>
-            <span class="persona-label persona-luffy" id="badgeLuffy"><i class="fa-solid fa-fire text-red"></i> Luffy Fire</span>
+          <div class="dual-persona-badge" id="dualPersonaBadge">
+            <i class="fa-solid fa-fire text-red flame-icon-bounce"></i>
+            <span>Arahkan kursor ke foto untuk memunculkan <strong>Luffy Fire Mode</strong></span>
           </div>
         </div>
 
