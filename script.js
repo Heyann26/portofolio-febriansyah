@@ -140,6 +140,7 @@ function initHeroParallax() {
   const portrait = document.getElementById('heroPortraitWrap');
   const strokeText = document.getElementById('heroStrokeTextWrap');
   const badge = document.getElementById('heroBadge');
+  const luffyHint = document.getElementById('heroLuffyHint');
 
   if (!stage || !portrait) return;
 
@@ -149,6 +150,16 @@ function initHeroParallax() {
   let targetY = 0;
   let idleTick = 0;
 
+  // Spring Physics & Cursor Tracking for Alter Ego Reveal
+  let isPortraitHovered = false;
+  let targetCursorX = -1000;
+  let targetCursorY = -1000;
+  let smoothCursorX = -1000;
+  let smoothCursorY = -1000;
+  let cursorVelX = 0;
+  let cursorVelY = 0;
+  let hintTimer = 0;
+
   window.addEventListener('mousemove', (e) => {
     const cx = window.innerWidth / 2;
     const cy = window.innerHeight / 2;
@@ -156,16 +167,14 @@ function initHeroParallax() {
     targetY = (e.clientY - cy) / cy;
   });
 
-  // CURSOR-DIRECTED REVEAL (Luffy Fire Mode muncul tepat di posisi kursor pada foto)
   function handleCursorOnPortrait(clientX, clientY) {
     const rect = portrait.getBoundingClientRect();
-    const localX = clientX - rect.left;
-    const localY = clientY - rect.top;
-
-    portrait.style.setProperty('--cursor-x', `${localX.toFixed(1)}px`);
-    portrait.style.setProperty('--cursor-y', `${localY.toFixed(1)}px`);
+    targetCursorX = clientX - rect.left;
+    targetCursorY = clientY - rect.top;
+    isPortraitHovered = true;
     portrait.style.setProperty('--luffy-opacity', '1');
-    portrait.style.setProperty('--reveal-radius', '175px');
+    portrait.style.setProperty('--reveal-radius', '135px');
+    if (luffyHint) luffyHint.style.opacity = '0';
   }
 
   portrait.addEventListener('mousemove', (e) => {
@@ -177,6 +186,7 @@ function initHeroParallax() {
   });
 
   portrait.addEventListener('mouseleave', () => {
+    isPortraitHovered = false;
     portrait.style.setProperty('--luffy-opacity', '0');
   });
 
@@ -195,9 +205,26 @@ function initHeroParallax() {
 
   portrait.addEventListener('touchend', () => {
     setTimeout(() => {
+      isPortraitHovered = false;
       portrait.style.setProperty('--luffy-opacity', '0');
     }, 1200);
   });
+
+  // Periodic Idle Hint: every 4.8s softly pulse Luffy Fire Mode so user knows to hover!
+  function updateAlterEgoHint() {
+    if (isPortraitHovered) {
+      if (luffyHint) luffyHint.style.opacity = '0';
+      return;
+    }
+    hintTimer += 0.016;
+    const cycle = hintTimer % 5.0;
+    if (cycle < 1.3 && luffyHint) {
+      const alpha = Math.sin((cycle / 1.3) * Math.PI) * 0.85;
+      luffyHint.style.opacity = alpha.toFixed(3);
+    } else if (luffyHint) {
+      luffyHint.style.opacity = '0';
+    }
+  }
 
   function updateParallax() {
     idleTick += 1;
@@ -228,6 +255,23 @@ function initHeroParallax() {
       const offsetY = +(portrait.dataset.offsetY || 0);
       const portraitScrollY = -scrollY * 0.28;
       portrait.style.transform = `translate(calc(-50% + ${mouseX * 28}px), ${offsetY + portraitScrollY + idleFloat}px) scale(${scale})`;
+    }
+
+    // Spring physics update for alter ego cursor coordinates
+    if (isPortraitHovered) {
+      if (smoothCursorX < -500) {
+        smoothCursorX = targetCursorX;
+        smoothCursorY = targetCursorY;
+      }
+      cursorVelX = (cursorVelX + (targetCursorX - smoothCursorX) * 0.22) * 0.72;
+      cursorVelY = (cursorVelY + (targetCursorY - smoothCursorY) * 0.22) * 0.72;
+      smoothCursorX += cursorVelX;
+      smoothCursorY += cursorVelY;
+
+      portrait.style.setProperty('--cursor-x', `${smoothCursorX.toFixed(1)}px`);
+      portrait.style.setProperty('--cursor-y', `${smoothCursorY.toFixed(1)}px`);
+    } else {
+      updateAlterEgoHint();
     }
 
     if (badge) {
@@ -785,43 +829,380 @@ window.addEventListener('click', (e) => {
 });
 
 /* ==========================================================================
-   11. CINEMATIC FULL-SCREEN LUFFY OPENING (5 SECONDS COUNTDOWN)
+   11. CINEMATIC WEBGL LIGHTNING SHADER & PARTICLE TEXT (TIKTOK REFERENCE)
    ========================================================================== */
+function initOpeningLightning() {
+  const canvas = document.getElementById('openingLightningCanvas');
+  if (!canvas) return null;
+  const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+  if (!gl) return null;
+
+  const vsSource = `
+    attribute vec2 aPosition;
+    void main() {
+      gl_Position = vec4(aPosition, 0.0, 1.0);
+    }
+  `;
+
+  const fsSource = `
+    precision mediump float;
+    uniform vec2 iResolution;
+    uniform float iTime;
+    uniform float uHue;
+    uniform float uXOffset;
+    uniform float uSpeed;
+    uniform float uIntensity;
+    uniform float uSize;
+    #define OCTAVE_COUNT 8
+    vec3 hsv2rgb(vec3 c) {
+        vec3 rgb = clamp(abs(mod(c.x * 6.0 + vec3(0.0,4.0,2.0), 6.0) - 3.0) - 1.0, 0.0, 1.0);
+        return c.z * mix(vec3(1.0), rgb, c.y);
+    }
+    float hash11(float p) {
+        p = fract(p * .1031);
+        p *= p + 33.33;
+        p *= p + p;
+        return fract(p);
+    }
+    float hash12(vec2 p) {
+        vec3 p3 = fract(vec3(p.xyx) * .1031);
+        p3 += dot(p3, p3.yzx + 33.33);
+        return fract((p3.x + p3.y) * p3.z);
+    }
+    mat2 rotate2d(float theta) {
+        float c = cos(theta);
+        float s = sin(theta);
+        return mat2(c, -s, s, c);
+    }
+    float noise(vec2 p) {
+        vec2 ip = floor(p);
+        vec2 fp = fract(p);
+        float a = hash12(ip);
+        float b = hash12(ip + vec2(1.0, 0.0));
+        float c = hash12(ip + vec2(0.0, 1.0));
+        float d = hash12(ip + vec2(1.0, 1.0));
+        vec2 t = smoothstep(0.0, 1.0, fp);
+        return mix(mix(a, b, t.x), mix(c, d, t.x), t.y);
+    }
+    float fbm(vec2 p) {
+        float value = 0.0;
+        float amplitude = 0.5;
+        for (int i = 0; i < OCTAVE_COUNT; ++i) {
+            value += amplitude * noise(p);
+            p *= rotate2d(0.45);
+            p *= 2.0;
+            amplitude *= 0.5;
+        }
+        return value;
+    }
+    void mainImage( out vec4 fragColor, in vec2 fragCoord ) {
+      vec2 uv = fragCoord / iResolution.xy;
+      uv = 2.0 * uv - 1.0;
+      float aspect = iResolution.x / iResolution.y;
+      uv.x *= aspect;
+      uv.x += uXOffset;
+        
+      // 1. Macroscopic sine path
+      float path = sin(uv.y * 3.0 - iTime * 2.5) * 0.25 
+                 + sin(uv.y * 5.0 + iTime * 1.5) * 0.15;
+        
+      // 2. Microscopic noise
+      vec2 noiseUv = uv * uSize * 1.5;
+      float n = 2.0 * fbm(noiseUv + 1.2 * iTime * uSpeed) - 1.0;
+        
+      float scale = aspect < 1.0 ? (aspect * 1.1) : 1.0;
+      float center = (path + n * 0.4) * scale;
+        
+      uv.y += n * 0.2 * scale;
+      float dist = abs(uv.x - center);
+        
+      vec3 baseColor = hsv2rgb(vec3(uHue / 360.0, 0.72, 0.95));
+      vec3 col = baseColor * pow(mix(0.0, 0.07, hash11(iTime * uSpeed)) / dist, 1.0) * uIntensity;
+      float alpha = clamp(max(col.r, max(col.g, col.b)), 0.0, 1.0);
+      fragColor = vec4(col, alpha);
+    }
+    void main() {
+        mainImage(gl_FragColor, gl_FragCoord.xy);
+    }
+  `;
+
+  function createShader(type, src) {
+    const s = gl.createShader(type);
+    gl.shaderSource(s, src);
+    gl.compileShader(s);
+    if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
+      gl.deleteShader(s);
+      return null;
+    }
+    return s;
+  }
+
+  const vs = createShader(gl.VERTEX_SHADER, vsSource);
+  const fs = createShader(gl.FRAGMENT_SHADER, fsSource);
+  if (!vs || !fs) return null;
+
+  const prog = gl.createProgram();
+  gl.attachShader(prog, vs);
+  gl.attachShader(prog, fs);
+  gl.linkProgram(prog);
+  if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) return null;
+  gl.useProgram(prog);
+
+  const quadBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, quadBuffer);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+    -1, -1,  1, -1, -1,  1,
+    -1,  1,  1, -1,  1,  1
+  ]), gl.STATIC_DRAW);
+
+  const aPos = gl.getAttribLocation(prog, "aPosition");
+  gl.enableVertexAttribArray(aPos);
+  gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
+
+  const uRes = gl.getUniformLocation(prog, "iResolution");
+  const uTime = gl.getUniformLocation(prog, "iTime");
+  const uHue = gl.getUniformLocation(prog, "uHue");
+  const uXOffset = gl.getUniformLocation(prog, "uXOffset");
+  const uSpeed = gl.getUniformLocation(prog, "uSpeed");
+  const uIntensity = gl.getUniformLocation(prog, "uIntensity");
+  const uSize = gl.getUniformLocation(prog, "uSize");
+
+  function resize() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+    canvas.width = Math.floor(window.innerWidth * dpr);
+    canvas.height = Math.floor(window.innerHeight * dpr);
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const startTime = performance.now();
+  let animId;
+
+  function render(now) {
+    if (document.hidden) {
+      animId = requestAnimationFrame(render);
+      return;
+    }
+    gl.viewport(0, 0, canvas.width, canvas.height);
+    gl.uniform2f(uRes, canvas.width, canvas.height);
+    gl.uniform1f(uTime, (now - startTime) / 1000);
+    gl.uniform1f(uHue, 218.0); // Electric Blue Lightning matching reference
+    gl.uniform1f(uXOffset, 0.0);
+    gl.uniform1f(uSpeed, 1.5);
+    gl.uniform1f(uIntensity, 1.25);
+    gl.uniform1f(uSize, 1.8);
+    gl.drawArrays(gl.TRIANGLES, 0, 6);
+
+    animId = requestAnimationFrame(render);
+  }
+  animId = requestAnimationFrame(render);
+
+  return () => {
+    cancelAnimationFrame(animId);
+    window.removeEventListener('resize', resize);
+  };
+}
+
+function initOpeningParticleText() {
+  const canvas = document.getElementById('openingParticleCanvas');
+  if (!canvas) return null;
+
+  const ctx = canvas.getContext('2d');
+  let width, height;
+  let particles = [];
+  let offscreenCanvas = null;
+  let frameCount = 0;
+  const sampleStep = 4;
+
+  class TextParticle {
+    constructor() {
+      this.pos = { x: 0, y: 0 };
+      this.vel = { x: 0, y: 0 };
+      this.acc = { x: 0, y: 0 };
+      this.target = { x: 0, y: 0 };
+      this.closeEnoughTarget = 100;
+      this.maxSpeed = Math.random() * 8 + 8;
+      this.maxForce = this.maxSpeed * 0.1;
+      this.particleSize = 3;
+      this.isKilled = false;
+      this.startColor = { r: 255, g: 255, b: 255 };
+      this.targetColor = { r: 255, g: 255, b: 255 };
+      this.colorWeight = 0;
+      this.colorBlendRate = Math.random() * 0.0275 + 0.0025;
+    }
+    move() {
+      let speedMult = 1;
+      const dx = this.target.x - this.pos.x;
+      const dy = this.target.y - this.pos.y;
+      const dist = Math.hypot(dx, dy);
+      if (dist < this.closeEnoughTarget) speedMult = dist / this.closeEnoughTarget;
+
+      let desX = 0, desY = 0;
+      if (dist > 0) {
+        desX = (dx / dist) * this.maxSpeed * speedMult;
+        desY = (dy / dist) * this.maxSpeed * speedMult;
+      }
+      const stX = desX - this.vel.x;
+      const stY = desY - this.vel.y;
+      const sDist = Math.hypot(stX, stY);
+      if (sDist > 0) {
+        this.acc.x += (stX / sDist) * this.maxForce;
+        this.acc.y += (stY / sDist) * this.maxForce;
+      }
+      this.vel.x += this.acc.x;
+      this.vel.y += this.acc.y;
+      this.pos.x += this.vel.x;
+      this.pos.y += this.vel.y;
+      this.acc.x = 0;
+      this.acc.y = 0;
+    }
+    draw(c) {
+      if (this.colorWeight < 1) {
+        this.colorWeight = Math.min(this.colorWeight + this.colorBlendRate, 1);
+      }
+      const r = Math.round(this.startColor.r + (this.targetColor.r - this.startColor.r) * this.colorWeight);
+      const g = Math.round(this.startColor.g + (this.targetColor.g - this.startColor.g) * this.colorWeight);
+      const b = Math.round(this.startColor.b + (this.targetColor.b - this.startColor.b) * this.colorWeight);
+      c.fillStyle = `rgb(${r}, ${g}, ${b})`;
+      c.beginPath();
+      c.arc(this.pos.x, this.pos.y, this.particleSize / 2, 0, Math.PI * 2);
+      c.fill();
+    }
+  }
+
+  function randomPosAround(cx, cy, radius, w, h) {
+    const rx = Math.random() * w - cx;
+    const ry = Math.random() * h - cy;
+    const len = Math.hypot(rx, ry);
+    if (len > 0) return { x: cx + (rx / len) * radius, y: cy + (ry / len) * radius };
+    return { x: cx, y: cy };
+  }
+
+  function setupTextTargets(w, h) {
+    frameCount = 0;
+    offscreenCanvas = document.createElement('canvas');
+    offscreenCanvas.width = w;
+    offscreenCanvas.height = h;
+    const octx = offscreenCanvas.getContext('2d', { willReadFrequently: true });
+    octx.textAlign = 'center';
+    octx.textBaseline = 'middle';
+
+    const scale = Math.min(1, w / 750);
+    const size1 = Math.round(50 * scale);
+    const size2 = Math.round(64 * scale);
+
+    // Line 1: Welcome To My (Crisp white to cyan gradient)
+    octx.font = `bold ${size1}px 'Plus Jakarta Sans', Arial, sans-serif`;
+    const grad1 = octx.createLinearGradient(w / 2 - 220, 0, w / 2 + 220, 0);
+    grad1.addColorStop(0, '#ffffff');
+    grad1.addColorStop(0.5, '#dbeafe');
+    grad1.addColorStop(1, '#bfdbfe');
+    octx.fillStyle = grad1;
+    octx.fillText('Welcome To My', w / 2, h / 2 - size1 * 0.7);
+
+    // Line 2: Portofolio Website (Signature electric crimson/blue)
+    octx.font = `bold ${size2}px 'Plus Jakarta Sans', Arial, sans-serif`;
+    octx.fillStyle = '#ff2d55';
+    octx.fillText('Portofolio Website', w / 2, h / 2 + size2 * 0.7);
+
+    const imgData = octx.getImageData(0, 0, w, h).data;
+    const pixels = [];
+    for (let i = 0; i < imgData.length; i += sampleStep * 4) {
+      if (imgData[i + 3] > 0) pixels.push(i);
+    }
+    // Shuffle positions
+    for (let i = pixels.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [pixels[i], pixels[j]] = [pixels[j], pixels[i]];
+    }
+
+    particles = [];
+    for (const idx of pixels) {
+      const px = (idx / 4) % w;
+      const py = Math.floor((idx / 4) / w);
+      const p = new TextParticle();
+      const spawn = randomPosAround(w / 2, h / 2, Math.max(w, h) * 1.1, w, h);
+      p.pos.x = spawn.x;
+      p.pos.y = spawn.y;
+      p.target.x = px;
+      p.target.y = py;
+      p.targetColor = { r: imgData[idx], g: imgData[idx + 1], b: imgData[idx + 2] };
+      particles.push(p);
+    }
+  }
+
+  function resize() {
+    const rect = canvas.getBoundingClientRect();
+    width = canvas.width = rect.width;
+    height = canvas.height = rect.height;
+    if (width > 0 && height > 0) {
+      setupTextTargets(width, height);
+    }
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  let animId;
+  function animate() {
+    if (document.hidden) {
+      animId = requestAnimationFrame(animate);
+      return;
+    }
+    ctx.clearRect(0, 0, width, height);
+    frameCount++;
+
+    let lockAlpha = 0;
+    if (frameCount > 85) {
+      lockAlpha = Math.min(1, (frameCount - 85) / 50);
+    }
+
+    ctx.globalAlpha = 1 - lockAlpha;
+    for (let i = 0; i < particles.length; i++) {
+      particles[i].move();
+      particles[i].draw(ctx);
+    }
+
+    if (offscreenCanvas && lockAlpha > 0) {
+      ctx.globalAlpha = lockAlpha;
+      ctx.drawImage(offscreenCanvas, 0, 0);
+      ctx.globalAlpha = 1;
+    }
+
+    animId = requestAnimationFrame(animate);
+  }
+  animate();
+
+  return () => {
+    cancelAnimationFrame(animId);
+    window.removeEventListener('resize', resize);
+  };
+}
+
 function initOpeningScreen() {
   const screen = document.getElementById('openingScreen');
   const bar = document.getElementById('openingProgressBar');
   const counter = document.getElementById('openingCounter');
-  const statusText = document.getElementById('openingStatusText');
+  const glowLead = document.getElementById('welcomeLoadingGlow');
   const skipBtn = document.getElementById('openingSkipBtn');
   const stage = document.getElementById('heroStage');
 
-  if (!screen || !bar || !counter) return;
+  if (!screen) return;
 
-  // Stagger letter reveals
-  const charSpans = screen.querySelectorAll('.char-span');
-  charSpans.forEach((span, i) => {
-    span.style.animationDelay = `${(i * 0.035 + 0.1).toFixed(2)}s`;
-  });
+  // Initialize WebGL Lightning & Particle text
+  const stopLightning = initOpeningLightning();
+  const stopParticles = initOpeningParticleText();
 
-  const TOTAL_DURATION_MS = 5000; // Persis 5 Detik
+  const DURATION_MS = 5000; // 5.0 detik
   const startTime = Date.now();
   let finished = false;
-
-  const statusMilestones = [
-    { at: 0, text: "MEMBANGKITKAN LUFFY FIRE GEAR..." },
-    { at: 25, text: "MENGHUBUNGKAN ASET PORTOFOLIO..." },
-    { at: 55, text: "KALIBRASI VISUAL 3D PARALLAX..." },
-    { at: 80, text: "MENYIAPKAN PENGALAMAN INTERAKTIF..." },
-    { at: 96, text: "SELAMAT DATANG DI PORTOFOLIO!" }
-  ];
 
   function finishIntro() {
     if (finished) return;
     finished = true;
 
-    bar.style.width = '100%';
-    counter.innerText = '100%';
-    if (statusText) statusText.innerHTML = 'SELAMAT DATANG!';
+    if (bar) bar.style.width = '100%';
+    if (counter) counter.innerText = '100%';
+    if (glowLead) glowLead.style.transform = 'translateX(0%)';
 
     setTimeout(() => {
       screen.classList.add('loaded');
@@ -829,40 +1210,31 @@ function initOpeningScreen() {
 
       setTimeout(() => {
         screen.style.display = 'none';
-      }, 850);
+        if (stopLightning) stopLightning();
+        if (stopParticles) stopParticles();
+      }, 900);
     }, 280);
   }
 
-  // Quick Skip trigger
-  if (skipBtn) {
-    skipBtn.addEventListener('click', finishIntro);
-  }
+  if (skipBtn) skipBtn.addEventListener('click', finishIntro);
   window.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') finishIntro();
   });
 
-  // Accurate 5.0s Progress Update
   const interval = setInterval(() => {
     if (finished) {
       clearInterval(interval);
       return;
     }
-
     const elapsed = Date.now() - startTime;
-    const progress = Math.min(100, (elapsed / TOTAL_DURATION_MS) * 100);
-    const remainingSec = Math.max(0, (TOTAL_DURATION_MS - elapsed) / 1000).toFixed(1);
-
-    bar.style.width = `${progress.toFixed(1)}%`;
-    counter.innerText = `${Math.floor(progress)}%`;
-
-    const milestone = [...statusMilestones].reverse().find(m => progress >= m.at);
-    if (milestone && statusText) {
-      statusText.innerHTML = `${milestone.text} &bull; ${remainingSec}s`;
-    }
+    const progress = Math.min(100, (elapsed / DURATION_MS) * 100);
+    if (bar) bar.style.width = `${progress.toFixed(1)}%`;
+    if (counter) counter.innerText = `${Math.floor(progress)}%`;
+    if (glowLead) glowLead.style.transform = `translateX(${progress - 100}%)`;
 
     if (progress >= 100) {
       clearInterval(interval);
       finishIntro();
     }
-  }, 30);
+  }, 25);
 }

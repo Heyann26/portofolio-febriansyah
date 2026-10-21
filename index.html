@@ -23,67 +23,41 @@
 </head>
 <body>
 
-  <!-- CINEMATIC FULL-SCREEN LUFFY OPENING (5 SECONDS ANIMATION) -->
+  <!-- CINEMATIC WEBGL LIGHTNING & PARTICLE OPENING SCREEN (5 SECONDS) -->
   <div class="opening-screen" id="openingScreen">
-    <!-- Fullscreen Dynamic Animated Luffy Background -->
+    <!-- WebGL Fullscreen Lightning Canvas Shader -->
+    <canvas id="openingLightningCanvas" class="opening-lightning-canvas"></canvas>
+
+    <!-- Fullscreen Dynamic Animated Luffy Background Blend -->
     <div class="opening-luffy-fullscreen-wrap">
-      <img src="assets/images/luffy_fullscreen_opening.jpg?v=20261021c" alt="Monkey D. Luffy Fire Mode One Piece" class="opening-luffy-fullscreen-img" id="openingLuffyImg">
-      <div class="opening-luffy-heat-wave"></div>
+      <img src="assets/images/luffy_fullscreen_opening.jpg?v=20261021d" alt="Monkey D. Luffy Fire Mode One Piece" class="opening-luffy-fullscreen-img" id="openingLuffyImg">
       <div class="opening-luffy-vignette"></div>
-      <div class="opening-flame-embers">
-        <span class="ember e1"></span>
-        <span class="ember e2"></span>
-        <span class="ember e3"></span>
-        <span class="ember e4"></span>
-        <span class="ember e5"></span>
-        <span class="ember e6"></span>
-      </div>
     </div>
 
+    <!-- Center Interactive Container -->
     <div class="opening-container">
       
-      <!-- Top Anime Flame Mode Tag -->
-      <div class="opening-luffy-tag">
-        <i class="fa-solid fa-fire-flame-curved text-red flame-icon-bounce"></i>
-        <span>MONKEY D. LUFFY &bull; RED HAWK GEAR MODE</span>
+      <!-- Particle Text Canvas (Welcome To My Portofolio Website) -->
+      <div class="opening-particle-canvas-wrap">
+        <canvas id="openingParticleCanvas" class="opening-particle-canvas"></canvas>
       </div>
 
-      <!-- Minimalist Tagline -->
-      <div class="opening-badge">
-        <span class="opening-badge-line"></span>
-        <span class="opening-badge-text">PORTFOLIO &mdash; 2026</span>
-        <span class="opening-badge-line"></span>
-      </div>
-
-      <!-- Main Reveal Title -->
-      <div class="opening-title-wrap">
-        <h1 class="opening-title" id="openingTitle">
-          <span class="word-group">
-            <span class="char-span">M</span><span class="char-span">U</span><span class="char-span">H</span><span class="char-span">A</span><span class="char-span">M</span><span class="char-span">M</span><span class="char-span">A</span><span class="char-span">D</span>
-          </span>
-          <span class="word-space">&nbsp;</span>
-          <span class="word-group text-red">
-            <span class="char-span">F</span><span class="char-span">E</span><span class="char-span">B</span><span class="char-span">R</span><span class="char-span">I</span><span class="char-span">A</span><span class="char-span">N</span><span class="char-span">S</span><span class="char-span">Y</span><span class="char-span">A</span><span class="char-span">H</span>
-          </span>
-        </h1>
-        <p class="opening-sub">S1 MANAJEMEN / ITB AHMAD DAHLAN JAKARTA &bull; @Heyann26</p>
-      </div>
-
-      <!-- 5-Second Precision Progress Track -->
-      <div class="opening-progress-box">
-        <div class="opening-progress-track">
-          <div class="opening-progress-bar" id="openingProgressBar"></div>
+      <!-- Minimalist Loading Box -->
+      <div class="welcome-loading-box">
+        <div class="welcome-loading-header">
+          <span>Loading</span>
+          <span id="openingCounter">0%</span>
         </div>
-        <div class="opening-status">
-          <span class="opening-status-text" id="openingStatusText">MEMUAT SISTEM &bull; 5.0s</span>
-          <span class="opening-counter" id="openingCounter">0%</span>
+        <div class="welcome-loading-track">
+          <div class="welcome-loading-glow" id="welcomeLoadingGlow"></div>
+          <div class="welcome-loading-bar" id="openingProgressBar"></div>
         </div>
       </div>
 
     </div>
 
     <!-- Quick Skip Button -->
-    <button class="opening-skip-btn" id="openingSkipBtn" title="Lewati Pembuka (5 Detik)">
+    <button class="opening-skip-btn" id="openingSkipBtn" title="Lewati Pembuka">
       <span>LEWATI</span> <i class="fa-solid fa-forward-step"></i>
     </button>
   </div>
@@ -186,30 +160,39 @@
           <!-- Persona 1: Muhammad Febriansyah (Real Person in Suit, Precision Clean Edge Cutout) -->
           <img 
             id="heroPortraitImg" 
-            src="assets/images/febri_official_portrait.png?v=20261021c" 
+            src="assets/images/febri_official_portrait.png?v=20261021d" 
             alt="Muhammad Febriansyah" 
             class="hero-portrait-img"
           >
 
-          <!-- Persona 2: Luffy Fire Mode (Pose-Matched, Revealed Directly by Cursor Position) -->
+          <!-- Periodic Hint Layer (Flashes softly when idle every ~4.5s just like reference!) -->
+          <div class="hero-luffy-hint" id="heroLuffyHint">
+            <img 
+              src="assets/images/luffy_matching_cutout.png?v=20261021d" 
+              alt="Luffy Fire Mode Alter Ego Hint" 
+              class="hero-portrait-img luffy-cutout-img"
+            >
+          </div>
+
+          <!-- Persona 2: Luffy Fire Mode (Revealed in smooth radial circle directly at cursor coordinates!) -->
           <div class="hero-luffy-overlay" id="heroLuffyOverlay">
             <img 
               id="heroPortraitLuffy" 
-              src="assets/images/luffy_matching_cutout.png?v=20261021c" 
+              src="assets/images/luffy_matching_cutout.png?v=20261021d" 
               alt="Monkey D. Luffy Fire Mode Pose-Matched Cutout" 
               class="hero-portrait-img luffy-cutout-img"
             >
           </div>
 
-          <!-- Cursor-Follower Fiery Spotlight Aura over Portrait -->
-          <div class="hero-flame-cursor-aura" id="heroFlameCursorAura"></div>
+          <!-- Cursor Follower Indicator Dot (mix-blend-mode difference / fiery glow) -->
+          <div class="hero-cursor-follower-dot" id="heroCursorFollowerDot"></div>
 
           <div class="hero-portrait-fade"></div>
 
           <!-- Interactive Dual Persona Cursor Guide Indicator -->
           <div class="dual-persona-badge" id="dualPersonaBadge">
-            <i class="fa-solid fa-fire text-red flame-icon-bounce"></i>
-            <span>Arahkan kursor ke foto untuk memunculkan <strong>Luffy Fire Mode</strong></span>
+            <i class="fa-solid fa-wand-magic-sparkles text-red"></i>
+            <span>Arahkan kursor ke foto untuk melihat <strong>Luffy Fire Mode</strong></span>
           </div>
         </div>
 
