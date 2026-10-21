@@ -413,11 +413,11 @@ body {
 
 .hero-name-top {
   display: block;
-  font-size: clamp(1.8rem, 5.2vw, 5.2rem);
-  font-weight: 800;
-  letter-spacing: clamp(3px, 1vw, 12px);
-  opacity: 0.9;
-  line-height: 0.94;
+  font-size: clamp(2.8rem, 8.4vw, 8.5rem);
+  font-weight: 900;
+  letter-spacing: clamp(3px, 0.9vw, 12px);
+  opacity: 0.95;
+  line-height: 0.92;
   margin-bottom: 0.05em;
   white-space: nowrap;
 }
@@ -476,8 +476,8 @@ body {
   pointer-events: none;
   z-index: 3;
   opacity: var(--luffy-opacity, 0);
-  mask-image: radial-gradient(circle var(--reveal-radius, 140px) at var(--cursor-x, -1000px) var(--cursor-y, -1000px), black 60%, transparent 100%);
-  -webkit-mask-image: radial-gradient(circle var(--reveal-radius, 140px) at var(--cursor-x, -1000px) var(--cursor-y, -1000px), black 60%, transparent 100%);
+  mask-image: radial-gradient(circle var(--reveal-radius, 140px) at var(--cursor-x, -1000px) var(--cursor-y, -1000px), black 25%, rgba(0, 0, 0, 0.6) 65%, transparent 100%);
+  -webkit-mask-image: radial-gradient(circle var(--reveal-radius, 140px) at var(--cursor-x, -1000px) var(--cursor-y, -1000px), black 25%, rgba(0, 0, 0, 0.6) 65%, transparent 100%);
   mask-repeat: no-repeat;
   -webkit-mask-repeat: no-repeat;
   transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1);
@@ -1909,8 +1909,8 @@ body {
     font-size: 0.8rem;
   }
   .hero-name-top {
-    font-size: clamp(1.3rem, 5vw, 2.5rem);
-    letter-spacing: clamp(2px, 0.6vw, 5px);
+    font-size: clamp(2rem, 7.6vw, 4.2rem);
+    letter-spacing: clamp(2px, 0.6vw, 6px);
   }
   .hero-name-main {
     font-size: clamp(2.4rem, 9.6vw, 4.8rem);
@@ -1920,7 +1920,7 @@ body {
 
 @media (max-width: 480px) {
   .hero-name-top {
-    font-size: clamp(0.95rem, 4.6vw, 1.45rem);
+    font-size: clamp(1.4rem, 6.6vw, 2.3rem);
     letter-spacing: 2px;
   }
   .hero-name-main {
