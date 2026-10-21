@@ -808,188 +808,8 @@ window.addEventListener('click', (e) => {
 });
 
 /* ==========================================================================
-   11. CINEMATIC PARTICLE TEXT OPENING (MUHAMMAD FEBRIANSYAH)
+   11. CINEMATIC OPENING CONTROLLER (KINETIC TYPOGRAPHY & PROGRESS SYSTEM)
    ========================================================================== */
-
-function initOpeningParticleText() {
-  const canvas = document.getElementById('openingParticleCanvas');
-  if (!canvas) return null;
-
-  const ctx = canvas.getContext('2d');
-  let width, height;
-  let particles = [];
-  let offscreenCanvas = null;
-  let frameCount = 0;
-  const sampleStep = 4;
-
-  class TextParticle {
-    constructor() {
-      this.pos = { x: 0, y: 0 };
-      this.vel = { x: 0, y: 0 };
-      this.acc = { x: 0, y: 0 };
-      this.target = { x: 0, y: 0 };
-      this.closeEnoughTarget = 100;
-      this.maxSpeed = Math.random() * 8 + 8;
-      this.maxForce = this.maxSpeed * 0.1;
-      this.particleSize = 3;
-      this.isKilled = false;
-      this.startColor = { r: 255, g: 255, b: 255 };
-      this.targetColor = { r: 255, g: 255, b: 255 };
-      this.colorWeight = 0;
-      this.colorBlendRate = Math.random() * 0.0275 + 0.0025;
-    }
-    move() {
-      let speedMult = 1;
-      const dx = this.target.x - this.pos.x;
-      const dy = this.target.y - this.pos.y;
-      const dist = Math.hypot(dx, dy);
-      if (dist < this.closeEnoughTarget) speedMult = dist / this.closeEnoughTarget;
-
-      let desX = 0, desY = 0;
-      if (dist > 0) {
-        desX = (dx / dist) * this.maxSpeed * speedMult;
-        desY = (dy / dist) * this.maxSpeed * speedMult;
-      }
-      const stX = desX - this.vel.x;
-      const stY = desY - this.vel.y;
-      const sDist = Math.hypot(stX, stY);
-      if (sDist > 0) {
-        this.acc.x += (stX / sDist) * this.maxForce;
-        this.acc.y += (stY / sDist) * this.maxForce;
-      }
-      this.vel.x += this.acc.x;
-      this.vel.y += this.acc.y;
-      this.pos.x += this.vel.x;
-      this.pos.y += this.vel.y;
-      this.acc.x = 0;
-      this.acc.y = 0;
-    }
-    draw(c) {
-      if (this.colorWeight < 1) {
-        this.colorWeight = Math.min(this.colorWeight + this.colorBlendRate, 1);
-      }
-      const r = Math.round(this.startColor.r + (this.targetColor.r - this.startColor.r) * this.colorWeight);
-      const g = Math.round(this.startColor.g + (this.targetColor.g - this.startColor.g) * this.colorWeight);
-      const b = Math.round(this.startColor.b + (this.targetColor.b - this.startColor.b) * this.colorWeight);
-      c.fillStyle = `rgb(${r}, ${g}, ${b})`;
-      c.beginPath();
-      c.arc(this.pos.x, this.pos.y, this.particleSize / 2, 0, Math.PI * 2);
-      c.fill();
-    }
-  }
-
-  function randomPosAround(cx, cy, radius, w, h) {
-    const rx = Math.random() * w - cx;
-    const ry = Math.random() * h - cy;
-    const len = Math.hypot(rx, ry);
-    if (len > 0) return { x: cx + (rx / len) * radius, y: cy + (ry / len) * radius };
-    return { x: cx, y: cy };
-  }
-
-  function setupTextTargets(w, h) {
-    frameCount = 0;
-    offscreenCanvas = document.createElement('canvas');
-    offscreenCanvas.width = w;
-    offscreenCanvas.height = h;
-    const octx = offscreenCanvas.getContext('2d', { willReadFrequently: true });
-    octx.textAlign = 'center';
-    octx.textBaseline = 'middle';
-
-    const scale = Math.min(1, w / 780);
-    const size1 = Math.round(44 * scale);
-    const size2 = Math.round(56 * scale);
-
-    // Line 1: MUHAMMAD FEBRIANSYAH (Crisp modern typography)
-    octx.font = `900 ${size1}px 'Plus Jakarta Sans', 'Outfit', Arial, sans-serif`;
-    const grad1 = octx.createLinearGradient(w / 2 - 240, 0, w / 2 + 240, 0);
-    grad1.addColorStop(0, '#ffffff');
-    grad1.addColorStop(0.5, '#f1f5f9');
-    grad1.addColorStop(1, '#e2e8f0');
-    octx.fillStyle = grad1;
-    octx.fillText('MUHAMMAD FEBRIANSYAH', w / 2, h / 2 - size1 * 0.65);
-
-    // Line 2: CREATIVE DEVELOPER (Signature fiery crimson/coral accent)
-    octx.font = `800 ${size2}px 'Plus Jakarta Sans', Arial, sans-serif`;
-    const grad2 = octx.createLinearGradient(w / 2 - 200, 0, w / 2 + 200, 0);
-    grad2.addColorStop(0, '#ff2d55');
-    grad2.addColorStop(0.5, '#ff5500');
-    grad2.addColorStop(1, '#ff3b30');
-    octx.fillStyle = grad2;
-    octx.fillText('CREATIVE DEVELOPER', w / 2, h / 2 + size2 * 0.75);
-
-    const imgData = octx.getImageData(0, 0, w, h).data;
-    const pixels = [];
-    for (let i = 0; i < imgData.length; i += sampleStep * 4) {
-      if (imgData[i + 3] > 0) pixels.push(i);
-    }
-    // Shuffle positions
-    for (let i = pixels.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [pixels[i], pixels[j]] = [pixels[j], pixels[i]];
-    }
-
-    particles = [];
-    for (const idx of pixels) {
-      const px = (idx / 4) % w;
-      const py = Math.floor((idx / 4) / w);
-      const p = new TextParticle();
-      const spawn = randomPosAround(w / 2, h / 2, Math.max(w, h) * 1.1, w, h);
-      p.pos.x = spawn.x;
-      p.pos.y = spawn.y;
-      p.target.x = px;
-      p.target.y = py;
-      p.targetColor = { r: imgData[idx], g: imgData[idx + 1], b: imgData[idx + 2] };
-      particles.push(p);
-    }
-  }
-
-  function resize() {
-    const rect = canvas.getBoundingClientRect();
-    width = canvas.width = rect.width;
-    height = canvas.height = rect.height;
-    if (width > 0 && height > 0) {
-      setupTextTargets(width, height);
-    }
-  }
-  resize();
-  window.addEventListener('resize', resize);
-
-  let animId;
-  function animate() {
-    if (document.hidden) {
-      animId = requestAnimationFrame(animate);
-      return;
-    }
-    ctx.clearRect(0, 0, width, height);
-    frameCount++;
-
-    let lockAlpha = 0;
-    if (frameCount > 85) {
-      lockAlpha = Math.min(1, (frameCount - 85) / 50);
-    }
-
-    ctx.globalAlpha = 1 - lockAlpha;
-    for (let i = 0; i < particles.length; i++) {
-      particles[i].move();
-      particles[i].draw(ctx);
-    }
-
-    if (offscreenCanvas && lockAlpha > 0) {
-      ctx.globalAlpha = lockAlpha;
-      ctx.drawImage(offscreenCanvas, 0, 0);
-      ctx.globalAlpha = 1;
-    }
-
-    animId = requestAnimationFrame(animate);
-  }
-  animate();
-
-  return () => {
-    cancelAnimationFrame(animId);
-    window.removeEventListener('resize', resize);
-  };
-}
-
 function initOpeningScreen() {
   const screen = document.getElementById('openingScreen');
   const bar = document.getElementById('openingProgressBar');
@@ -1000,10 +820,7 @@ function initOpeningScreen() {
 
   if (!screen) return;
 
-  // Initialize Particle text
-  const stopParticles = initOpeningParticleText();
-
-  const DURATION_MS = 4200; // 4.2 detik
+  const DURATION_MS = 3800; // 3.8 detik smooth cinematic intro
   const startTime = Date.now();
   let finished = false;
 
@@ -1021,8 +838,7 @@ function initOpeningScreen() {
 
       setTimeout(() => {
         screen.style.display = 'none';
-        if (stopParticles) stopParticles();
-      }, 900);
+      }, 800);
     }, 280);
   }
 
