@@ -403,6 +403,7 @@ body {
   text-transform: uppercase;
   background: linear-gradient(180deg, #ffffff 0%, #dedfe8 50%, #7e8096 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   opacity: 0.95;
   filter: drop-shadow(0 15px 35px rgba(0, 0, 0, 0.7));
@@ -2274,6 +2275,7 @@ body {
   animation-delay: 0.32s;
   background: linear-gradient(135deg, #ffffff 0%, #ff5500 45%, #ff2d55 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   filter: drop-shadow(0 0 25px rgba(255, 60, 40, 0.45));
 }
