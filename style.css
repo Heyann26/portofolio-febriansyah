@@ -1906,30 +1906,87 @@ body {
     padding: 0.65rem 1rem;
     font-size: 0.8rem;
   }
+  .hero-bg-text-wrap,
+  .hero-stroke-text-wrap {
+    top: 37%;
+    width: 100%;
+    padding: 0 1rem;
+  }
   .hero-name-top {
-    font-size: clamp(2rem, 7.6vw, 4.2rem);
-    letter-spacing: clamp(2px, 0.6vw, 6px);
+    font-size: clamp(1.4rem, 5.2vw, 2.6rem);
+    letter-spacing: clamp(3px, 0.8vw, 7px);
+    margin-bottom: 0.12em;
+    opacity: 0.95;
   }
   .hero-name-main {
-    font-size: clamp(2.4rem, 9.6vw, 4.8rem);
-    letter-spacing: -0.5px;
+    font-size: clamp(1.8rem, 7.2vw, 3.8rem);
+    letter-spacing: clamp(-0.8px, -0.05vw, -0.3px);
+    line-height: 0.92;
+  }
+  .hero-stroke-text {
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.25);
   }
 }
 
 @media (max-width: 480px) {
+  .hero-bg-text-wrap,
+  .hero-stroke-text-wrap {
+    top: 34%;
+    width: 100%;
+    padding: 0 0.8rem;
+  }
   .hero-name-top {
-    font-size: clamp(1.4rem, 6.6vw, 2.3rem);
-    letter-spacing: 2px;
+    font-size: clamp(1rem, 4.4vw, 1.4rem);
+    letter-spacing: clamp(3px, 1.1vw, 5.5px);
+    margin-bottom: 0.16em;
+    line-height: 0.95;
+    opacity: 0.92;
   }
   .hero-name-main {
-    font-size: clamp(1.8rem, 8.4vw, 2.6rem);
-    letter-spacing: -0.3px;
+    font-size: clamp(1.28rem, 6.2vw, 1.95rem);
+    letter-spacing: clamp(-0.8px, -0.1vw, -0.3px);
+    line-height: 0.94;
+  }
+  .hero-stroke-text {
+    -webkit-text-stroke: 0.8px rgba(255, 255, 255, 0.2);
   }
   .hero-stage {
-    min-height: 520px;
+    min-height: 540px;
   }
   .hero-portrait-wrap {
-    height: 75vh;
+    height: 74vh;
+    max-height: 720px;
+  }
+  .hero-meta-badge {
+    bottom: 5.2rem;
+    padding: 0.55rem 0.9rem;
+    max-width: 92vw;
+    width: auto;
+  }
+  .hero-subtitle {
+    font-size: 0.74rem;
+    white-space: normal;
+    text-align: center;
+    line-height: 1.35;
+  }
+}
+
+@media (max-width: 375px) {
+  .hero-bg-text-wrap,
+  .hero-stroke-text-wrap {
+    top: 33%;
+    padding: 0 0.5rem;
+  }
+  .hero-name-top {
+    font-size: 0.92rem;
+    letter-spacing: 2.8px;
+  }
+  .hero-name-main {
+    font-size: 1.22rem;
+    letter-spacing: -0.5px;
+  }
+  .hero-subtitle {
+    font-size: 0.7rem;
   }
 }
 

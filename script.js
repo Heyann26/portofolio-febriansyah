@@ -573,8 +573,9 @@ function updateHeroText(val) {
   const strokeText = document.getElementById('heroStrokeText');
   const cleanVal = val.trim() || 'FEBRIANSYAH';
 
-  if (bgText) bgText.innerText = cleanVal;
-  if (strokeText) strokeText.innerText = cleanVal;
+  const html = `<span class="hero-name-top">MUHAMMAD</span><span class="hero-name-main">${cleanVal}</span>`;
+  if (bgText) bgText.innerHTML = html;
+  if (strokeText) strokeText.innerHTML = html;
   localStorage.setItem('portfolio_herotext', cleanVal);
 }
 
@@ -630,7 +631,7 @@ function resetCustomizer() {
   localStorage.removeItem('portfolio_herotext');
   localStorage.removeItem('portfolio_subtitle');
 
-  applyPortraitSrc('assets/images/febri_portrait.png');
+  applyPortraitSrc('assets/images/febri_official_portrait.png');
   updateHeroText('FEBRIANSYAH');
   updateHeroSubtitle('Muhammad Febriansyah • Mahasiswa Manajemen ITB Ahmad Dahlan');
 
