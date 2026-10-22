@@ -15,6 +15,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initStatsCounter();
   initCustomizer();
   initProjectModals();
+  initProjectFilter();
+  initSoundToggle();
 });
 
 /* ==========================================================================
@@ -742,6 +744,297 @@ function initProjectModals() {
     const modal = document.getElementById('projectModal');
     if (modal) modal.classList.remove('active');
   };
+
+  // Close modals when clicking backdrop
+  window.addEventListener('click', (e) => {
+    const resumeModal = document.getElementById('resumeModal');
+    const projectModal = document.getElementById('projectModal');
+    if (e.target === resumeModal) closeResumeModal();
+    if (e.target === projectModal) window.closeProjectModal();
+  });
+}
+
+/* ==========================================================================
+   FEATURE 2: RESUME / CV MODAL & PDF PRINT
+   ========================================================================== */
+function openResumeModal() {
+  const modal = document.getElementById('resumeModal');
+  if (modal) {
+    modal.classList.add('active');
+    modal.setAttribute('aria-hidden', 'false');
+    if (window.SoundFX) SoundFX.playChime();
+  }
+}
+
+function closeResumeModal() {
+  const modal = document.getElementById('resumeModal');
+  if (modal) {
+    modal.classList.remove('active');
+    modal.setAttribute('aria-hidden', 'true');
+    if (window.SoundFX) SoundFX.playClick();
+  }
+}
+
+function printResume() {
+  if (window.SoundFX) SoundFX.playClick();
+  window.print();
+}
+
+window.openResumeModal = openResumeModal;
+window.closeResumeModal = closeResumeModal;
+window.printResume = printResume;
+
+/* ==========================================================================
+   FEATURE 4: PROJECT CATEGORY FILTER
+   ========================================================================== */
+function initProjectFilter() {
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const projectCards = document.querySelectorAll('#projectsGrid .project-card');
+  if (!filterBtns.length || !projectCards.length) return;
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const category = btn.getAttribute('data-filter');
+      
+      if (window.SoundFX) SoundFX.playFilter();
+
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      projectCards.forEach(card => {
+        const cardCats = (card.getAttribute('data-category') || '').split(' ');
+        const matches = category === 'all' || cardCats.includes(category);
+
+        if (matches) {
+          card.classList.remove('filter-hide');
+          requestAnimationFrame(() => {
+            card.classList.remove('filter-fade-out');
+          });
+        } else {
+          card.classList.add('filter-fade-out');
+          setTimeout(() => {
+            if (card.classList.contains('filter-fade-out')) {
+              card.classList.add('filter-hide');
+            }
+          }, 320);
+        }
+      });
+    });
+  });
+}
+
+/* ==========================================================================
+   FEATURE 6: SOUND FX ENGINE (SYNTHESIZED WEB AUDIO API)
+   ========================================================================== */
+const SoundFX = {
+  ctx: null,
+  enabled: true,
+
+  init() {
+    const saved = localStorage.getItem('portfolio_sound');
+    this.enabled = saved !== 'muted';
+    this.updateToggleButton();
+
+    const unlock = () => {
+      this.getAudioContext();
+      window.removeEventListener('pointerdown', unlock);
+      window.removeEventListener('keydown', unlock);
+    };
+    window.addEventListener('pointerdown', unlock, { once: true });
+    window.addEventListener('keydown', unlock, { once: true });
+  },
+
+  getAudioContext() {
+    if (!this.ctx && (window.AudioContext || window.webkitAudioContext)) {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      this.ctx = new AudioCtx();
+    }
+    if (this.ctx && this.ctx.state === 'suspended') {
+      this.ctx.resume();
+    }
+    return this.ctx;
+  },
+
+  toggle() {
+    this.enabled = !this.enabled;
+    localStorage.setItem('portfolio_sound', this.enabled ? 'enabled' : 'muted');
+    this.updateToggleButton();
+    if (this.enabled) {
+      this.playConfirm();
+      showToast('Efek suara interaktif diaktifkan.');
+    } else {
+      showToast('Efek suara dinonaktifkan (Muted).');
+    }
+  },
+
+  updateToggleButton() {
+    const btn = document.getElementById('soundToggleBtn');
+    if (!btn) return;
+    if (this.enabled) {
+      btn.classList.remove('muted');
+      btn.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
+      btn.setAttribute('title', 'Suara Aktif (Klik untuk Matikan)');
+    } else {
+      btn.classList.add('muted');
+      btn.innerHTML = '<i class="fa-solid fa-volume-xmark"></i>';
+      btn.setAttribute('title', 'Suara Dimatikan (Klik untuk Aktifkan)');
+    }
+  },
+
+  // Subtle mechanical tap for button clicks
+  playClick() {
+    if (!this.enabled) return;
+    const ctx = this.getAudioContext();
+    if (!ctx) return;
+
+    try {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      const now = ctx.currentTime;
+
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(680, now);
+      osc.frequency.exponentialRampToValueAtTime(260, now + 0.045);
+
+      gain.gain.setValueAtTime(0.08, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.045);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start(now);
+      osc.stop(now + 0.046);
+    } catch (e) {}
+  },
+
+  // Delicate micro-tone on hover
+  playHover() {
+    if (!this.enabled) return;
+    const ctx = this.getAudioContext();
+    if (!ctx) return;
+
+    try {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      const now = ctx.currentTime;
+
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(1250, now);
+
+      gain.gain.setValueAtTime(0.015, now);
+      gain.gain.exponentialRampToValueAtTime(0.0005, now + 0.035);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start(now);
+      osc.stop(now + 0.036);
+    } catch (e) {}
+  },
+
+  // Filter category click
+  playFilter() {
+    if (!this.enabled) return;
+    const ctx = this.getAudioContext();
+    if (!ctx) return;
+
+    try {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      const now = ctx.currentTime;
+
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(950, now);
+      osc.frequency.exponentialRampToValueAtTime(520, now + 0.06);
+
+      gain.gain.setValueAtTime(0.09, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start(now);
+      osc.stop(now + 0.061);
+    } catch (e) {}
+  },
+
+  // Modal open chime (futuristic arpeggio)
+  playChime() {
+    if (!this.enabled) return;
+    const ctx = this.getAudioContext();
+    if (!ctx) return;
+
+    try {
+      const notes = [523.25, 659.25, 783.99]; // C5, E5, G5
+      notes.forEach((freq, i) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        const start = ctx.currentTime + (i * 0.05);
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, start);
+
+        gain.gain.setValueAtTime(0.06, start);
+        gain.gain.exponentialRampToValueAtTime(0.001, start + 0.22);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.start(start);
+        osc.stop(start + 0.23);
+      });
+    } catch (e) {}
+  },
+
+  // Confirmation sound for toggle
+  playConfirm() {
+    const ctx = this.getAudioContext();
+    if (!ctx) return;
+
+    try {
+      const notes = [440, 880];
+      notes.forEach((freq, i) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        const start = ctx.currentTime + (i * 0.06);
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, start);
+
+        gain.gain.setValueAtTime(0.08, start);
+        gain.gain.exponentialRampToValueAtTime(0.001, start + 0.12);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.start(start);
+        osc.stop(start + 0.13);
+      });
+    } catch (e) {}
+  }
+};
+
+window.SoundFX = SoundFX;
+
+function initSoundToggle() {
+  SoundFX.init();
+  const toggleBtn = document.getElementById('soundToggleBtn');
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      SoundFX.toggle();
+    });
+  }
+
+  // Attach micro-sounds to interactive buttons & links
+  document.querySelectorAll('button, .nav-link, .btn-primary-glow, .btn-secondary-glass, .social-icon, .drawer-link').forEach(el => {
+    el.addEventListener('mouseenter', () => SoundFX.playHover());
+    el.addEventListener('click', () => {
+      if (!el.classList.contains('filter-btn') && el.id !== 'soundToggleBtn') {
+        SoundFX.playClick();
+      }
+    });
+  });
 }
 
 /* ==========================================================================
