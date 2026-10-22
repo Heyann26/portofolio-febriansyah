@@ -2234,16 +2234,34 @@ body {
 }
 
 /* ==========================================================================
-   ANIMASI OPENING INTRO SCREEN (PREMIUM EDITORIAL & SATISFYING LOADING HUD)
+   ANIMASI OPENING INTRO SCREEN (USES THE EXACT INNER WEBSITE BACKGROUND)
    ========================================================================== */
+body.intro-active .navbar,
+body.intro-active .hero-section,
+body.intro-active .social-dock,
+body.intro-active .customizer-trigger,
+body.intro-active main > section:not(.hero-section) {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+.navbar,
+.hero-section,
+.social-dock,
+.customizer-trigger {
+  transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), 
+              visibility 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
 .opening-screen {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: var(--bg-main); /* #070709 */
-  z-index: 999999;
+  background-color: transparent; /* Seamlessly transparent to let the real background & particles shine! */
+  z-index: 99999;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2258,39 +2276,6 @@ body {
   pointer-events: none;
   transform: scale(0.985);
   filter: blur(12px);
-}
-
-/* Ambient Horizon Glow - Deep Architectural Radiance (No generic circle blobs) */
-.opening-fire-glow {
-  position: absolute;
-  bottom: -10%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 110vw;
-  height: 60vh;
-  background: radial-gradient(ellipse 85% 50% at 50% 100%, 
-    rgba(255, 45, 85, 0.22) 0%, 
-    rgba(255, 85, 0, 0.11) 40%, 
-    rgba(20, 10, 25, 0.04) 70%, 
-    transparent 85%);
-  filter: blur(60px);
-  pointer-events: none;
-  z-index: 1;
-}
-
-/* Subtle Architectural Grid Lines - High-End Luxury Tech Aesthetic */
-.opening-grid-lines {
-  position: absolute;
-  inset: 0;
-  background-image: 
-    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
-  background-size: 64px 64px;
-  background-position: center center;
-  mask-image: radial-gradient(ellipse 75% 65% at 50% 50%, #000 25%, transparent 80%);
-  -webkit-mask-image: radial-gradient(ellipse 75% 65% at 50% 50%, #000 25%, transparent 80%);
-  pointer-events: none;
-  z-index: 2;
 }
 
 /* Center Interactive Container */

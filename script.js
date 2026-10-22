@@ -883,6 +883,7 @@ function initOpeningScreen() {
     if (statusText) statusText.textContent = 'Selamat Datang';
 
     setTimeout(() => {
+      document.body.classList.remove('intro-active');
       screen.classList.add('loaded');
       if (stage) stage.classList.add('intro-done');
 
