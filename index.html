@@ -19,33 +19,34 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
   <!-- Stylesheet -->
-  <link rel="stylesheet" href="style.css?v=20261021_clean_v3">
+  <link rel="stylesheet" href="style.css?v=20261023_opening_v1">
 </head>
 <body>
 
-  <!-- CINEMATIC IMMERSIVE OPENING SCREEN (MATCHES INNER BG CONCEPT) -->
+  <!-- CINEMATIC IMMERSIVE OPENING SCREEN -->
   <div class="opening-screen" id="openingScreen">
-    <!-- Ambient Fiery Glow & Rising Embers (NO AI-slop circular orbs) -->
+    <!-- Ambient Horizon Light & Architectural Depth (No AI-slop circular dots/orbs) -->
     <div class="opening-fire-glow"></div>
-    <canvas id="openingEmbersCanvas" class="opening-embers-canvas"></canvas>
+    <div class="opening-grid-lines" aria-hidden="true"></div>
 
     <!-- Center Interactive Container -->
     <div class="opening-container">
       
-      <!-- Top Department & University Badge (S1 Manajemen ITB-AD) -->
+      <!-- Top Department & University Badge (Clean Editorial Pill - No Bullets/Dots) -->
       <div class="opening-status-badge">
-        <span class="opening-status-dot"></span>
-        <span class="opening-status-text">S1 MANAJEMEN &bull; ITB AHMAD DAHLAN JAKARTA</span>
+        <span class="opening-badge-tag">PORTFOLIO</span>
+        <span class="opening-badge-separator">/</span>
+        <span class="opening-status-text">S1 MANAJEMEN — ITB AHMAD DAHLAN JAKARTA</span>
       </div>
 
-      <!-- Kinetic Typography Motion (Replacing Canvas Particles) -->
+      <!-- Kinetic Typography Motion with Premium Display Fonts -->
       <div class="opening-title-container">
         <div class="opening-name-row">
           <span class="opening-word-reveal word-1">MUHAMMAD</span>
           <span class="opening-word-reveal word-2">FEBRIANSYAH</span>
         </div>
         <div class="opening-role-row">
-          <span class="opening-role-reveal">STRATEGIC BUSINESS &bull; CREATIVE DIGITAL TECH</span>
+          <span class="opening-role-reveal">STRATEGIC BUSINESS <span class="opening-role-slash">/</span> DIGITAL TECH INNOVATION</span>
         </div>
       </div>
 
@@ -55,29 +56,36 @@
           &ldquo;Mengintegrasikan manajemen bisnis strategis dengan inovasi teknologi digital kreatif.&rdquo;
         </p>
         <div class="opening-quote-tags">
-          <span class="opening-tag"><i class="fa-solid fa-chart-pie text-red"></i> Business Management</span>
-          <span class="opening-tag"><i class="fa-solid fa-code text-blue"></i> Web Developer</span>
-          <span class="opening-tag"><i class="fa-solid fa-graduation-cap text-orange"></i> S1 Manajemen ITB-AD</span>
+          <span class="opening-tag"><i class="fa-solid fa-chart-pie"></i> Business Management</span>
+          <span class="opening-tag"><i class="fa-solid fa-code"></i> Web Developer</span>
+          <span class="opening-tag"><i class="fa-solid fa-graduation-cap"></i> S1 Manajemen ITB-AD</span>
         </div>
       </div>
 
-      <!-- Minimalist Loading Box -->
+      <!-- High-End Satisfying Loading Box -->
       <div class="welcome-loading-box">
         <div class="welcome-loading-header">
-          <span>Inisialisasi Sistem</span>
-          <span id="openingCounter">0%</span>
+          <div class="welcome-loading-status">
+            <span class="welcome-status-indicator" aria-hidden="true"></span>
+            <span id="openingStatusText">Menginisialisasi Portofolio...</span>
+          </div>
+          <span id="openingCounter" class="opening-counter">00%</span>
         </div>
         <div class="welcome-loading-track">
           <div class="welcome-loading-glow" id="welcomeLoadingGlow"></div>
           <div class="welcome-loading-bar" id="openingProgressBar"></div>
+        </div>
+        <div class="welcome-loading-footer">
+          <span class="welcome-footer-tag">MUHAMMAD FEBRIANSYAH — 2026</span>
+          <span class="welcome-footer-tip"><kbd>ESC</kbd> LEWATI</span>
         </div>
       </div>
 
     </div>
 
     <!-- Quick Skip Button -->
-    <button class="opening-skip-btn" id="openingSkipBtn" title="Lewati Pembuka">
-      <span>LEWATI</span> <i class="fa-solid fa-forward-step"></i>
+    <button class="opening-skip-btn" id="openingSkipBtn" title="Lewati Pembuka (Esc)" aria-label="Lewati Pembuka">
+      <span>LEWATI</span> <i class="fa-solid fa-arrow-right"></i>
     </button>
   </div>
 
@@ -801,6 +809,6 @@
   <div class="toast-container" id="toastContainer"></div>
 
   <!-- JavaScript -->
-  <script src="script.js?v=20261021_mobile_v2"></script>
+  <script src="script.js?v=20261023_opening_v1"></script>
 </body>
 </html>

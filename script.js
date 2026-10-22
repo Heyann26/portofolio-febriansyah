@@ -809,109 +809,78 @@ window.addEventListener('click', (e) => {
 });
 
 /* ==========================================================================
-   11. CINEMATIC OPENING CONTROLLER (KINETIC TYPOGRAPHY & PROGRESS SYSTEM)
+   11. CINEMATIC OPENING CONTROLLER (SATISFYING NON-LINEAR HUD SYSTEM)
    ========================================================================== */
-function initOpeningEmbers() {
-  const canvas = document.getElementById('openingEmbersCanvas');
-  if (!canvas) return { stop: () => {} };
-
-  const ctx = canvas.getContext('2d');
-  let width = (canvas.width = window.innerWidth);
-  let height = (canvas.height = window.innerHeight);
-
-  const handleResize = () => {
-    if (!canvas) return;
-    width = canvas.width = window.innerWidth;
-    height = canvas.height = window.innerHeight;
-  };
-  window.addEventListener('resize', handleResize);
-
-  let isRunning = true;
-  const emberCount = width > 768 ? 48 : 28;
-  const embers = [];
-
-  for (let i = 0; i < emberCount; i++) {
-    embers.push({
-      x: Math.random() * width,
-      y: height + Math.random() * 80,
-      size: Math.random() * 2.6 + 1.2,
-      speedY: Math.random() * 1.8 + 0.9,
-      speedX: (Math.random() - 0.5) * 0.9,
-      wobbleSpeed: Math.random() * 0.04 + 0.02,
-      wobbleOffset: Math.random() * Math.PI * 2,
-      opacity: Math.random() * 0.6 + 0.35,
-      hue: Math.random() > 0.4 ? (Math.random() * 22 + 15) : (Math.random() * 15 + 355) // warm flame orange & crimson
-    });
-  }
-
-  let animFrameId = null;
-
-  function renderEmbers() {
-    if (!isRunning) return;
-    ctx.clearRect(0, 0, width, height);
-
-    const time = Date.now() * 0.003;
-
-    for (let i = 0; i < embers.length; i++) {
-      const e = embers[i];
-      e.y -= e.speedY;
-      e.x += e.speedX + Math.sin(time + e.wobbleOffset) * 0.6;
-      e.opacity -= 0.0018;
-
-      if (e.y < -20 || e.opacity <= 0.05 || e.x < -30 || e.x > width + 30) {
-        e.y = height + Math.random() * 40;
-        e.x = width * 0.15 + Math.random() * (width * 0.7);
-        e.opacity = Math.random() * 0.65 + 0.35;
-        e.speedY = Math.random() * 1.8 + 0.9;
-      }
-
-      ctx.save();
-      ctx.beginPath();
-      ctx.arc(e.x, e.y, e.size, 0, Math.PI * 2);
-      ctx.fillStyle = `hsla(${e.hue}, 100%, 60%, ${e.opacity})`;
-      ctx.shadowColor = `hsla(${e.hue}, 100%, 50%, 0.8)`;
-      ctx.shadowBlur = e.size * 4;
-      ctx.fill();
-      ctx.restore();
-    }
-
-    animFrameId = requestAnimationFrame(renderEmbers);
-  }
-
-  animFrameId = requestAnimationFrame(renderEmbers);
-
-  return {
-    stop: () => {
-      isRunning = false;
-      if (animFrameId) cancelAnimationFrame(animFrameId);
-      window.removeEventListener('resize', handleResize);
-    }
-  };
-}
-
 function initOpeningScreen() {
   const screen = document.getElementById('openingScreen');
   const bar = document.getElementById('openingProgressBar');
   const counter = document.getElementById('openingCounter');
+  const statusText = document.getElementById('openingStatusText');
   const glowLead = document.getElementById('welcomeLoadingGlow');
   const skipBtn = document.getElementById('openingSkipBtn');
   const stage = document.getElementById('heroStage');
 
   if (!screen) return;
 
-  const embersCtrl = initOpeningEmbers();
-  const DURATION_MS = 3800; // 3.8 detik smooth cinematic intro
-  const startTime = Date.now();
+  const DURATION_MS = 2700; // Optimal sweet spot for cinematic impact without dragging
+  const startTime = performance.now();
   let finished = false;
+  let animFrameId = null;
+
+  const STATUS_STEPS = [
+    { at: 0, text: 'Menginisialisasi Portofolio...' },
+    { at: 26, text: 'Memuat Modul Bisnis & Web...' },
+    { at: 60, text: 'Menyelaraskan Visual & Data...' },
+    { at: 86, text: 'Menyiapkan Tampilan Utama...' },
+    { at: 100, text: 'Selamat Datang' }
+  ];
+
+  function updateStatus(progress) {
+    if (!statusText) return;
+    let currentText = STATUS_STEPS[0].text;
+    for (let i = 0; i < STATUS_STEPS.length; i++) {
+      if (progress >= STATUS_STEPS[i].at) {
+        currentText = STATUS_STEPS[i].text;
+      }
+    }
+    if (statusText.textContent !== currentText) {
+      statusText.textContent = currentText;
+    }
+  }
+
+  // Smooth custom easing curve for a deeply satisfying, human-crafted feel
+  function calculateProgress(t) {
+    // t from 0 to 1
+    if (t <= 0) return 0;
+    if (t >= 1) return 100;
+
+    // Multi-phase ease: fast onset, smooth glide, brief deliberate settle, snappy finish
+    let progress;
+    if (t < 0.3) {
+      // Fast ramp to ~32%
+      const p = t / 0.3;
+      progress = 32 * Math.sin(p * Math.PI / 2);
+    } else if (t < 0.75) {
+      // Steady progress from 32% to 84%
+      const p = (t - 0.3) / 0.45;
+      progress = 32 + (84 - 32) * (1 - Math.cos(p * Math.PI / 2));
+    } else {
+      // Snappy precision finish from 84% to 100%
+      const p = (t - 0.75) / 0.25;
+      progress = 84 + (100 - 84) * Math.pow(p, 1.25);
+    }
+    return Math.min(100, Math.max(0, progress));
+  }
 
   function finishIntro() {
     if (finished) return;
     finished = true;
-    embersCtrl.stop();
+    if (animFrameId) cancelAnimationFrame(animFrameId);
 
     if (bar) bar.style.width = '100%';
-    if (counter) counter.innerText = '100%';
+    if (counter) counter.textContent = '100%';
     if (glowLead) glowLead.style.transform = 'translateX(0%)';
+    if (statusText) statusText.textContent = 'Selamat Datang';
 
     setTimeout(() => {
       screen.classList.add('loaded');
@@ -919,29 +888,36 @@ function initOpeningScreen() {
 
       setTimeout(() => {
         screen.style.display = 'none';
-      }, 800);
-    }, 280);
+      }, 750);
+    }, 220);
   }
 
   if (skipBtn) skipBtn.addEventListener('click', finishIntro);
   window.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') finishIntro();
+    if (e.key === 'Escape' || e.key === 'Esc') finishIntro();
   });
 
-  const interval = setInterval(() => {
-    if (finished) {
-      clearInterval(interval);
-      return;
-    }
-    const elapsed = Date.now() - startTime;
-    const progress = Math.min(100, (elapsed / DURATION_MS) * 100);
+  function step(now) {
+    if (finished) return;
+    const elapsed = now - startTime;
+    const t = Math.min(1, elapsed / DURATION_MS);
+    const progress = calculateProgress(t);
+
+    const intVal = Math.floor(progress);
+    const formatted = intVal < 10 ? `0${intVal}%` : `${intVal}%`;
+
     if (bar) bar.style.width = `${progress.toFixed(1)}%`;
-    if (counter) counter.innerText = `${Math.floor(progress)}%`;
+    if (counter) counter.textContent = formatted;
     if (glowLead) glowLead.style.transform = `translateX(${progress - 100}%)`;
 
-    if (progress >= 100) {
-      clearInterval(interval);
+    updateStatus(progress);
+
+    if (t >= 1) {
       finishIntro();
+    } else {
+      animFrameId = requestAnimationFrame(step);
     }
-  }, 25);
+  }
+
+  animFrameId = requestAnimationFrame(step);
 }
